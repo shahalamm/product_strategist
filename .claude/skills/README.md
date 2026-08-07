@@ -7,8 +7,9 @@ research notes, drafting a competitor teardown, or scoring an opportunity.
 
 ## Status
 
-Empty by design. No skills have been implemented yet — this repository is
-currently scaffolding only.
+No longer empty — see `docs/roadmap.md` for the current build order and
+what each skill does. That list is the single source of truth for what's
+built; it isn't duplicated here to avoid the two going out of sync.
 
 ## Structure
 

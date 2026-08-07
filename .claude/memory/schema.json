@@ -32,7 +32,7 @@
           "enum": [
             "insight", "decision", "assumption", "persona", "competitor",
             "market-signal", "opportunity", "risk", "feature-idea",
-            "research-source"
+            "research-source", "requirement"
           ]
         },
         "title": { "type": "string", "minLength": 1 },
@@ -189,6 +189,41 @@
                     "minItems": 1,
                     "items": { "type": "string" },
                     "description": "research-source record ids backing this profile. A competitor record with no evidence behind it should not exist."
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "type": { "const": "requirement" } } },
+          "then": {
+            "required": ["data"],
+            "properties": {
+              "data": {
+                "type": "object",
+                "required": ["statement", "acceptance_criteria", "elaborates_decision_id"],
+                "properties": {
+                  "statement": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "A single concrete, testable functional requirement — not a restatement of the decision itself."
+                  },
+                  "acceptance_criteria": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": { "type": "string" },
+                    "description": "Specific, checkable pass/fail conditions."
+                  },
+                  "edge_cases": {
+                    "type": "array",
+                    "items": { "type": "string" },
+                    "default": []
+                  },
+                  "elaborates_decision_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "The id of the decision record this requirement makes buildable. Required so every requirement traces to a specific, already-made choice."
                   }
                 }
               }

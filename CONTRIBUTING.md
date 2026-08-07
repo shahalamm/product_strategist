@@ -90,12 +90,15 @@ specific `data` shape for types where that shape is already load-bearing:
 `research-source` needs `claim` (one specific, falsifiable finding, not a
 paraphrase of a whole source) and `retrieved_at`; `competitor` needs
 `product_name`, `positioning`, and `evidence_ids` (the `research-source`
-records backing the profile — see `.claude/memory/README.md` and
-`.claude/examples/research-agent/` for full examples). A skill or agent
-that writes one of these four types must populate `data` in its required
-shape, not just narrate the equivalent content in `details` or
-`summary` — those fields are for human-readable framing, not for holding
-data another skill needs to parse.
+records backing the profile); `requirement` needs `statement`,
+`acceptance_criteria`, and `elaborates_decision_id` (the specific
+`decision` record it makes buildable — see `.claude/memory/README.md`,
+`.claude/examples/research-agent/`, and `.claude/examples/solution-design/`
+for full examples). A skill or agent that writes one of these five types
+must populate `data` in its required shape, not just narrate the
+equivalent content in `details` or `summary` — those fields are for
+human-readable framing, not for holding data another skill needs to
+parse.
 
 When a skill needs a different type (e.g. `persona`, `market-signal`) to
 carry specific required fields, add a matching `if`/`then` block to

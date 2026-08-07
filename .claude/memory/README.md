@@ -55,17 +55,20 @@ section). Skills and agents should not read or write `project_id` today.
 
 `schema.json` enforces a required structured shape (via `data`) only for
 the record types that a real skill or agent already produces:
-`decision`, `assumption` (written by `discovery-interview`), and
-`research-source`, `competitor` (written by `research-agent`). That's not
-an oversight — each has an obvious, stable shape that's already load-bearing
-for how this platform reasons about discovery or research (a decision
+`decision`, `assumption` (written by `discovery-interview`),
+`research-source`, `competitor` (written by `research-agent`), and
+`requirement` (written by `solution-design`). That's not an oversight —
+each has an obvious, stable shape that's already load-bearing for how
+this platform reasons about discovery, research, or design (a decision
 needs its alternatives and rationale to be useful later; an assumption
 needs to be a falsifiable statement with a validation status; a
 research-source needs one checkable claim and a retrieval date, not a
 vague paraphrase of an article; a competitor profile needs to name the
 product, state its positioning in its own words, and cite the
 research-source records backing it, or it isn't a profile — it's an
-opinion).
+opinion; a requirement needs a testable statement, checkable acceptance
+criteria, and the id of the decision it makes buildable, or it's a wish,
+not a requirement).
 
 The other types (`insight`, `persona`, `market-signal`, `opportunity`,
 `risk`, `feature-idea`) stay generic — `data` is optional and
@@ -78,8 +81,10 @@ block to `schema.json` at that point — see `CONTRIBUTING.md`'s memory
 contract section.
 
 For fully-populated `research-source` and `competitor` examples, see
-`.claude/examples/research-agent/` — they're worked out there rather than
-duplicated here, alongside the agent that actually produces them.
+`.claude/examples/research-agent/`; for `requirement`, see
+`.claude/examples/solution-design/` — they're worked out there rather
+than duplicated here, alongside the skill/agent that actually produces
+them.
 
 A `decision`'s `data.alternatives_considered` items may also carry an
 optional `impact` object (`customer_impact`, `business_impact`,

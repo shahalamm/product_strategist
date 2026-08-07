@@ -7,8 +7,9 @@ that stress-tests a hypothesis.
 
 ## Status
 
-Empty by design. No agents have been implemented yet — this repository is
-currently scaffolding only.
+No longer empty — see `docs/roadmap.md` for the current build order and
+what each agent does. That list is the single source of truth for what's
+built; it isn't duplicated here to avoid the two going out of sync.
 
 ## Structure
 

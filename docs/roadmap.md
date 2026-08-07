@@ -28,17 +28,22 @@ The platform is built one skill/agent at a time, narrow before wide, per
    rather than ignoring it, and recommends exactly one via a single
    tagged `decision` record with a traceable rationale. Doesn't research
    or design — reads memory, writes one decision.
+5. **`solution-design`** (skill) — given a specific active `decision` id
+   (not only strategy recommendations — a discovery-interview scope
+   decision qualifies too), elaborates it into concrete, testable
+   `requirement` records. Never re-litigates the target decision and never
+   writes a new `decision` for small implementation choices — those get
+   resolved inline in a requirement's `details` instead. No output
+   document; the requirement records are the deliverable.
 
 ## Still to come
 
-- **solution-design** — takes a strategic direction into concrete product
-  design. Not built yet.
 - **systems-impact** — assesses what a proposed design touches downstream
   (technical, operational, org). Not built yet.
 - **documentation-agent** — renders the artifacts this platform is meant
   to produce (briefs, PRDs, personas, roadmaps) from accumulated memory.
   Not built yet.
 
-Each of these, when built, follows the same pattern as the three above:
+Each of these, when built, follows the same pattern as the ones above:
 scaffolded first if needed, then implemented only when explicitly
 requested, per `CONTRIBUTING.md`.
