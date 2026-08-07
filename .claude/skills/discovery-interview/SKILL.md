@@ -81,6 +81,25 @@ not necessarily aloud) why this one won over the runner-up. If two
 dimensions are close, prefer the one a hedge word in the user's own last
 statement pointed at.
 
+### Guardrail: don't let a question slide into solution design
+
+Before turning a known risk or open assumption into a question, check
+whether resolving it would require proposing *how* to address it — a
+mechanism, a feature, or a design choice (e.g. "block the action vs.
+notify after the fact vs. do nothing at all"). If it would, do not offer
+those options or ask the user to choose among them, even if the user
+would happily answer if asked directly — constructing and weighing
+solution alternatives is out of scope for this skill (see "Scope of this
+skill" above), regardless of who's doing the choosing.
+
+In that case, ask only whether the risk/assumption needs addressing at
+all, and how important or urgent that is — a fact about severity, not a
+fix for it (e.g. "does the budget owner need to know about this at all,
+and how urgent is that?", not "should we block it or just notify
+after?"). Log the result as an `insight` or `assumption` capturing the
+user's stated preference, never as a `decision` with
+`alternatives_considered` — see Step 3.
+
 Ask **exactly one** question. Never batch multiple questions in one turn.
 
 ## Step 2: Never accept a vague or hedged answer at face value
@@ -94,7 +113,9 @@ If the answer is hedged or vague:
 
 1. Ask **one** targeted follow-up that converts the hedge into something
    concrete and checkable — a number, a name, a yes/no, a specific
-   mechanism. Don't just repeat the original question.
+   existing fact. Don't just repeat the original question, and don't let
+   the follow-up turn into proposing a solution — see the guardrail in
+   Step 1 if the hedge is on an open risk or assumption.
 2. You may probe up to twice on the same underlying point. If it's still
    vague after that, stop probing — don't nag the user in circles.
 3. When you stop probing without a concrete answer, explicitly log the
@@ -115,8 +136,12 @@ assumption), write one or more records to `.claude/memory/<project-slug>.json`,
 each conforming to `.claude/memory/schema.json`:
 
 - **`decision`** — the user explicitly commits to a direction or chooses
-  among alternatives. Requires `data.alternatives_considered` (at least the
-  option taken, and any real alternative that was weighed — even briefly),
+  among alternatives **about the idea or problem itself** (e.g. its scope,
+  its target user, whether to pursue it at all) — never a chosen mechanism
+  for addressing a risk or assumption surfaced during the interview; that
+  would be solution design, which this skill doesn't do (see the guardrail
+  in Step 1). Requires `data.alternatives_considered` (at least the option
+  taken, and any real alternative that was weighed — even briefly),
   `data.recommendation`, and `data.rationale`.
 - **`assumption`** — an unresolved, hedged, or unverified belief being
   operated on. Requires `data.statement` (falsifiable) and

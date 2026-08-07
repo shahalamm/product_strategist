@@ -178,70 +178,56 @@ recommend at all. *Success criteria* and *Evidence* remain lower-leverage
 until this is settled, since "success" can't be defined while a known risk
 is still open.
 
-**Question:** "If admin approval goes away, should whoever owns the budget
-still get some visibility into new seats before or as they're added — e.g.
-a notification, a spending cap, a monthly digest — or is silently
-increasing the bill acceptable?"
+**Guardrail check:** resolving *how* the budget owner stays informed —
+block vs. notify vs. digest vs. spending cap — would mean proposing and
+weighing solution mechanisms, which is out of scope for this skill (see
+SKILL.md's guardrail in Step 1). So the question stays on the fact the
+skill actually needs: whether this matters to the requester at all, and
+how urgently — not which mechanism should handle it.
 
-**Answer (1st attempt, vague):** "Yeah I guess they should know somehow,
-we can figure out the details later."
+**Question:** "If admin approval goes away, does whoever owns the budget
+need to know about new seats being added at all — and if so, how urgent is
+that: do they need to know as it happens, or is finding out later fine?"
 
-*Hedge detected: "I guess," "somehow," "figure out the details later" —
-directly on the open risk. Probe once, forcing a provisional concrete
-choice rather than accepting deferral.*
+**Answer (1st attempt, vague):** "Yeah I guess they should know, but I'm
+not sure how urgent — we can figure out the details later."
 
-**Probe:** "Before logging this as settled, 'know somehow' isn't specific
-enough to act on. Minimally: does it need to block the invite (a hard
-stop, like today), or is it enough to just inform the budget owner after
-the fact (a soft notification)? Pick one, even provisionally."
+*Hedge detected: "I guess," "not sure," "figure out the details later."
+The "need to know at all" half is answered (yes); the urgency half isn't.
+Probe once on urgency specifically — still without offering a mechanism.*
 
-**Answer (2nd attempt, concrete):** "Soft notification is fine — real-time
-is nice to have but not required for v1."
+**Probe:** "Just the urgency, roughly: does it need to reach them before or
+as the seat is added, or is it fine if they only find out well after the
+fact — say, on a weekly or monthly basis?"
 
-*Concrete enough to log as a decision that directly resolves the open
-risk. Note this is the second case in this example of a vague answer being
-probed — here the probe succeeded in producing a concrete, actionable
-choice, unlike Turn 1's rejection-frequency question, which remained
-unresolved after one probe and was logged as an open assumption instead.
-Both are correct outcomes of probing — the skill doesn't force every
-vague answer to resolve, only makes sure it doesn't get treated as settled
-without either resolving or being explicitly marked open.*
+**Answer (2nd attempt, concrete):** "Well after the fact is fine, not
+urgent. Doesn't need to be immediate."
+
+*Concrete on both need (yes) and urgency (low) — but this is still the
+requester's own stated preference, not a decision this skill is entitled
+to make or a validated fact from whoever actually owns the budget. Log it
+as a low-confidence `assumption`, not a `decision`: no mechanism was
+proposed or chosen, so there's nothing to put in
+`alternatives_considered`. This is also the second case in this example of
+a vague answer getting probed — like Turn 1's rejection-frequency
+question, the probe here converts a hedge into something concrete, but
+because it's an unverified preference rather than a checked fact, it stays
+an `assumption` rather than becoming settled.*
 
 **Memory record written:**
 
 ```json
 {
-  "id": "decision-2026-08-20-soft-notification-not-hard-block",
-  "type": "decision",
-  "title": "Replace hard approval with a soft notification to the budget owner",
-  "summary": "Admin approval is replaced by a non-blocking notification to the budget owner when a new seat is added, addressing the budget-visibility risk without reintroducing a hard approval gate.",
-  "status": "active",
-  "confidence": "medium",
+  "id": "assumption-2026-08-20-budget-owner-notification-preference",
+  "type": "assumption",
+  "title": "Budget owner needs to know about new seats, but not urgently",
+  "summary": "Requester believes the budget owner needs some visibility into new self-invited seats, but that low-urgency, after-the-fact awareness is sufficient — this hasn't been checked with an actual budget owner, and no mechanism has been decided.",
+  "status": "draft",
+  "confidence": "low",
   "data": {
-    "alternatives_considered": [
-      {
-        "option": "Keep a hard approval gate (status quo)",
-        "pros": ["Preserves budget visibility exactly as today"],
-        "cons": ["Reintroduces the friction and admin-availability bottleneck the idea exists to remove"],
-        "rejected_because": "Directly defeats the purpose of the idea; requester wants approval gone, not relocated."
-      },
-      {
-        "option": "Soft, non-blocking notification to the budget owner",
-        "pros": ["Preserves visibility without blocking the invite", "Matches requester's stated preference"],
-        "cons": ["Doesn't prevent overspend before it happens, only informs after"]
-      },
-      {
-        "option": "No notification at all",
-        "cons": ["Leaves the budget-visibility risk from Turn 1 completely unaddressed"],
-        "rejected_because": "Requester confirmed budget owner should 'know somehow' — silence was not acceptable even provisionally."
-      }
-    ],
-    "recommendation": "Add a non-blocking notification to the budget owner when a new seat is added via self-invite; real-time delivery is a nice-to-have, not required for v1.",
-    "rationale": "Directly answers the open risk from Turn 1 (losing the only budget checkpoint) without reintroducing the approval friction the idea is meant to remove. Requester explicitly chose soft-and-eventual over hard-and-blocking when forced to pick.",
-    "open_questions": [
-      "Notification channel (email, in-app, Slack) not yet decided.",
-      "Whether the budget owner can retroactively remove a seat after the fact is unresolved."
-    ]
+    "statement": "The budget owner needs to know when new seats are added via self-invite, but does not need that information in real time — finding out well after the fact (e.g. weekly or monthly) is sufficient.",
+    "validation_status": "unvalidated",
+    "impact_if_wrong": "If budget owners actually need near-real-time visibility to catch unexpected spend before it compounds, a low-urgency approach would let them find out too late to act — undermining the risk this assumption was meant to address."
   },
   "tags": ["self-serve-invites", "billing"],
   "sources": [],
@@ -252,6 +238,10 @@ without either resolving or being explicitly marked open.*
 }
 ```
 
+No mechanism (notification, spending cap, digest, etc.) is decided here —
+that design work belongs to a future skill, once discovery has surfaced
+enough to hand off.
+
 ---
 
 ## Turn 4 — user pauses the interview
@@ -259,7 +249,7 @@ without either resolving or being explicitly marked open.*
 **User:** "That's enough for now, I need to check with finance."
 
 **Skill response:** Acknowledges the pause, briefly confirms what was
-captured this session (one open assumption, one risk, two decisions, one
+captured this session (two open assumptions, one risk, one decision, one
 insight, all in `.claude/memory/self-serve-team-invites.json`), and stops.
 It does **not** assess whether discovery is "complete" — that's explicitly
 out of scope for this skill (see SKILL.md). No memory record is written
