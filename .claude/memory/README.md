@@ -124,6 +124,37 @@ structured types. Both validate against `schema.json`.
 }
 ```
 
+### Invalid: `decision` missing `data`
+
+`schema.json`'s `if`/`then` rule for `decision` includes
+`"required": ["data"]`, so a `decision` record that omits `data` entirely
+— not just one with a malformed `data` — fails validation. The same rule
+applies to `assumption`. This record is otherwise well-formed but is
+**invalid** against `schema.json`, with the error
+`'data' is a required property`:
+
+```json
+{
+  "id": "decision-2026-08-15-teams-plan-pricing-model",
+  "type": "decision",
+  "title": "Adopt seat-based pricing for the Teams plan launch",
+  "summary": "Chose seat-based pricing over usage-based or flat-rate for the upcoming Teams plan, based on competitor benchmarking and finance modeling.",
+  "status": "active",
+  "confidence": "medium",
+  "tags": ["pricing", "teams-plan"],
+  "sources": [],
+  "related_ids": [],
+  "owner": "example",
+  "created_at": "2026-08-15T00:00:00Z",
+  "updated_at": "2026-08-15T00:00:00Z"
+}
+```
+
+A skill that writes a `decision` record without a `data` object (e.g.
+narrating the rationale only in `summary`/`details`) will fail validation
+against `schema.json`, by design — see "Why `decision` and `assumption`
+require a `data` shape" above.
+
 ### `assumption`
 
 ```json
