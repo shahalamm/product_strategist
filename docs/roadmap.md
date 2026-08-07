@@ -22,11 +22,15 @@ The platform is built one skill/agent at a time, narrow before wide, per
    Capability Matrix comparing the project's own stance to what was
    found. Refuses to research a broad category if scope isn't established
    yet.
+4. **`strategy-agent`** (agent) — given an already-grounded open
+   risk/assumption, generates 2-4 solution options with a structured
+   impact assessment each, engages with any existing competitor research
+   rather than ignoring it, and recommends exactly one via a single
+   tagged `decision` record with a traceable rationale. Doesn't research
+   or design — reads memory, writes one decision.
 
 ## Still to come
 
-- **strategy** — turns validated discovery + research into a recommended
-  direction. Not built yet.
 - **solution-design** — takes a strategic direction into concrete product
   design. Not built yet.
 - **systems-impact** — assesses what a proposed design touches downstream

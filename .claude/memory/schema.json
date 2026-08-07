@@ -98,7 +98,19 @@
                         "option": { "type": "string" },
                         "pros": { "type": "array", "items": { "type": "string" } },
                         "cons": { "type": "array", "items": { "type": "string" } },
-                        "rejected_because": { "type": "string" }
+                        "rejected_because": { "type": "string" },
+                        "impact": {
+                          "type": "object",
+                          "description": "Optional. Structured impact assessment for this option — used by strategy-agent; discovery-interview's decisions don't need this and shouldn't be retrofitted to include it.",
+                          "properties": {
+                            "customer_impact": { "type": "string" },
+                            "business_impact": { "type": "string" },
+                            "engineering_complexity": { "type": "string", "enum": ["low", "medium", "high"] },
+                            "operational_complexity": { "type": "string", "enum": ["low", "medium", "high"] },
+                            "scalability_risk": { "type": "string" },
+                            "long_term_maintainability": { "type": "string" }
+                          }
+                        }
                       }
                     }
                   },

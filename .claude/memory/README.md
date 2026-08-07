@@ -81,6 +81,15 @@ For fully-populated `research-source` and `competitor` examples, see
 `.claude/examples/research-agent/` — they're worked out there rather than
 duplicated here, alongside the agent that actually produces them.
 
+A `decision`'s `data.alternatives_considered` items may also carry an
+optional `impact` object (`customer_impact`, `business_impact`,
+`engineering_complexity`, `operational_complexity`, `scalability_risk`,
+`long_term_maintainability`) — used by `strategy-agent` to compare
+options structurally, not just narratively. It's optional at the schema
+level on purpose: `discovery-interview`'s existing decisions don't need
+it and haven't been retrofitted to include it. See
+`.claude/examples/strategy-agent/` for a fully-populated example.
+
 ## Example records
 
 Two fully-populated examples showing correct use of `data` for the two
