@@ -92,13 +92,16 @@ paraphrase of a whole source) and `retrieved_at`; `competitor` needs
 `product_name`, `positioning`, and `evidence_ids` (the `research-source`
 records backing the profile); `requirement` needs `statement`,
 `acceptance_criteria`, and `elaborates_decision_id` (the specific
-`decision` record it makes buildable — see `.claude/memory/README.md`,
-`.claude/examples/research-agent/`, and `.claude/examples/solution-design/`
-for full examples). A skill or agent that writes one of these five types
-must populate `data` in its required shape, not just narrate the
-equivalent content in `details` or `summary` — those fields are for
-human-readable framing, not for holding data another skill needs to
-parse.
+`decision` record it makes buildable); `system-impact` needs
+`system_area`, `impact_description`, `severity`, and
+`elaborates_requirement_ids` (the specific `requirement` record(s) it
+traces from — see `.claude/memory/README.md`,
+`.claude/examples/research-agent/`, `.claude/examples/solution-design/`,
+and `.claude/examples/systems-impact/` for full examples). A skill or
+agent that writes one of these six types must populate `data` in its
+required shape, not just narrate the equivalent content in `details` or
+`summary` — those fields are for human-readable framing, not for holding
+data another skill needs to parse.
 
 When a skill needs a different type (e.g. `persona`, `market-signal`) to
 carry specific required fields, add a matching `if`/`then` block to

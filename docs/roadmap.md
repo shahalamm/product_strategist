@@ -35,15 +35,22 @@ The platform is built one skill/agent at a time, narrow before wide, per
    writes a new `decision` for small implementation choices — those get
    resolved inline in a requirement's `details` instead. No output
    document; the requirement records are the deliverable.
+6. **`systems-impact`** (agent) — given a decision's buildable
+   `requirement` records, assesses what downstream systems and workflows
+   (data model, monitoring, customer support, etc.) they concretely
+   touch, each finding traceable to a specific requirement with a
+   severity. Stops and asks for `solution-design` to run first if the
+   target decision has no requirements yet. Identifies impact only —
+   never proposes a mitigation, a fix, or a new requirement/decision.
 
 ## Still to come
 
-- **systems-impact** — assesses what a proposed design touches downstream
-  (technical, operational, org). Not built yet.
+Only one skill/agent from the original vision remains unbuilt:
+
 - **documentation-agent** — renders the artifacts this platform is meant
   to produce (briefs, PRDs, personas, roadmaps) from accumulated memory.
   Not built yet.
 
-Each of these, when built, follows the same pattern as the ones above:
+When it's built, it follows the same pattern as the ones above:
 scaffolded first if needed, then implemented only when explicitly
 requested, per `CONTRIBUTING.md`.

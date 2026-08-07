@@ -32,7 +32,7 @@
           "enum": [
             "insight", "decision", "assumption", "persona", "competitor",
             "market-signal", "opportunity", "risk", "feature-idea",
-            "research-source", "requirement"
+            "research-source", "requirement", "system-impact"
           ]
         },
         "title": { "type": "string", "minLength": 1 },
@@ -224,6 +224,40 @@
                     "type": "string",
                     "minLength": 1,
                     "description": "The id of the decision record this requirement makes buildable. Required so every requirement traces to a specific, already-made choice."
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "type": { "const": "system-impact" } } },
+          "then": {
+            "required": ["data"],
+            "properties": {
+              "data": {
+                "type": "object",
+                "required": ["system_area", "impact_description", "severity", "elaborates_requirement_ids"],
+                "properties": {
+                  "system_area": {
+                    "type": "string",
+                    "enum": [
+                      "apis", "data-model", "events", "analytics", "reporting",
+                      "dashboards", "customer-support", "operations",
+                      "customer-communication", "monitoring", "observability"
+                    ]
+                  },
+                  "impact_description": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "A specific, concrete downstream effect — not a restatement of the requirement itself."
+                  },
+                  "severity": { "type": "string", "enum": ["low", "medium", "high"] },
+                  "elaborates_requirement_ids": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": { "type": "string" },
+                    "description": "requirement record ids this impact traces from. A system-impact record with no traceable requirement is a guess, not an assessment."
                   }
                 }
               }
