@@ -1,0 +1,25 @@
+{
+  "version": "1.0.0",
+  "records": [
+    {
+      "id": "insight-2026-08-07-onboarding-friction",
+      "type": "insight",
+      "title": "Trial users abandon setup before reaching first value",
+      "summary": "Several early-adopter interviews point to the account/workspace setup step as the main drop-off point before users experience the product's core value.",
+      "details": "This is a placeholder example record showing the expected shape of a memory record — see .claude/memory/schema.json for the full contract. Once skills exist that read/write memory, real records will replace examples like this one.",
+      "tags": ["onboarding", "activation"],
+      "status": "draft",
+      "confidence": "medium",
+      "sources": [
+        {
+          "label": "Customer interview - illustrative example",
+          "reference": "n/a - placeholder example, not a real source"
+        }
+      ],
+      "related_ids": [],
+      "owner": "example",
+      "created_at": "2026-08-07T00:00:00Z",
+      "updated_at": "2026-08-07T00:00:00Z"
+    }
+  ]
+}

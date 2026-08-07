@@ -1,0 +1,136 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://product-strategist.local/schema/project-memory.json",
+  "title": "Project Memory Store",
+  "description": "Shared memory for the AI Product Discovery Platform. A store is a versioned collection of memory records that skills and agents read from and write to, so discovery work compounds across sessions instead of starting cold each time.",
+  "type": "object",
+  "required": ["version", "records"],
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Schema version this store's records were written against, e.g. \"1.0.0\".",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "records": {
+      "type": "array",
+      "description": "The memory records in this store.",
+      "items": { "$ref": "#/definitions/record" }
+    }
+  },
+  "definitions": {
+    "record": {
+      "type": "object",
+      "title": "Memory Record",
+      "description": "A single unit of durable discovery knowledge: an insight, decision, assumption, persona, competitor profile, market signal, opportunity, risk, feature idea, or research source.",
+      "required": [
+        "id",
+        "type",
+        "title",
+        "summary",
+        "status",
+        "confidence",
+        "created_at",
+        "updated_at"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Stable unique identifier for this record (e.g. a UUID or a short slug). Referenced by other records via related_ids.",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "description": "What kind of thing this record represents.",
+          "enum": [
+            "insight",
+            "decision",
+            "assumption",
+            "persona",
+            "competitor",
+            "market-signal",
+            "opportunity",
+            "risk",
+            "feature-idea",
+            "research-source"
+          ]
+        },
+        "title": {
+          "type": "string",
+          "description": "Short, human-scannable label for the record.",
+          "minLength": 1
+        },
+        "summary": {
+          "type": "string",
+          "description": "One to a few sentences capturing the substance of the record.",
+          "minLength": 1
+        },
+        "details": {
+          "type": "string",
+          "description": "Optional longer-form Markdown body with full context, elaboration, or supporting narrative."
+        },
+        "tags": {
+          "type": "array",
+          "description": "Free-form labels for filtering and grouping (e.g. project or theme names).",
+          "items": { "type": "string" },
+          "default": []
+        },
+        "status": {
+          "type": "string",
+          "description": "Current lifecycle state of the record. Prefer updating status over deleting records, so the history of what was believed stays intact.",
+          "enum": ["draft", "active", "validated", "invalidated", "deprecated"]
+        },
+        "confidence": {
+          "type": "string",
+          "description": "How much this record should be trusted absent further validation.",
+          "enum": ["low", "medium", "high"]
+        },
+        "sources": {
+          "type": "array",
+          "description": "Evidence this record is based on, so claims stay traceable.",
+          "items": {
+            "type": "object",
+            "required": ["label"],
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string",
+                "description": "Human-readable name of the source (e.g. \"Customer interview - Acme Corp, 2026-07-14\")."
+              },
+              "reference": {
+                "type": "string",
+                "description": "URL, file path, or other pointer to the source material."
+              }
+            }
+          },
+          "default": []
+        },
+        "related_ids": {
+          "type": "array",
+          "description": "IDs of other records this one relates to, supports, or was derived from. Use this to link records instead of duplicating their content.",
+          "items": { "type": "string" },
+          "default": []
+        },
+        "owner": {
+          "type": "string",
+          "description": "Name of the skill or agent that created or last materially updated this record."
+        },
+        "session_id": {
+          "type": "string",
+          "description": "Optional identifier for the Claude Code session that produced this record, for traceability."
+        },
+        "created_at": {
+          "type": "string",
+          "description": "ISO 8601 timestamp when the record was first created.",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "description": "ISO 8601 timestamp when the record was last modified.",
+          "format": "date-time"
+        }
+      }
+    }
+  }
+}
