@@ -2,19 +2,17 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://product-strategist.local/schema/project-memory.json",
   "title": "Project Memory Store",
-  "description": "Shared memory for the AI Product Discovery Platform. A store is a versioned collection of memory records that skills and agents read from and write to, so discovery work compounds across sessions instead of starting cold each time.",
+  "description": "Shared memory for the AI Product Discovery Platform.",
   "type": "object",
   "required": ["version", "records"],
   "additionalProperties": false,
   "properties": {
     "version": {
       "type": "string",
-      "description": "Schema version this store's records were written against, e.g. \"1.0.0\".",
       "pattern": "^\\d+\\.\\d+\\.\\d+$"
     },
     "records": {
       "type": "array",
-      "description": "The memory records in this store.",
       "items": { "$ref": "#/definitions/record" }
     }
   },
@@ -22,115 +20,118 @@
     "record": {
       "type": "object",
       "title": "Memory Record",
-      "description": "A single unit of durable discovery knowledge: an insight, decision, assumption, persona, competitor profile, market signal, opportunity, risk, feature idea, or research source.",
       "required": [
-        "id",
-        "type",
-        "title",
-        "summary",
-        "status",
-        "confidence",
-        "created_at",
-        "updated_at"
+        "id", "type", "title", "summary", "status", "confidence",
+        "created_at", "updated_at"
       ],
       "additionalProperties": false,
       "properties": {
-        "id": {
-          "type": "string",
-          "description": "Stable unique identifier for this record (e.g. a UUID or a short slug). Referenced by other records via related_ids.",
-          "minLength": 1
-        },
+        "id": { "type": "string", "minLength": 1 },
         "type": {
           "type": "string",
-          "description": "What kind of thing this record represents.",
           "enum": [
-            "insight",
-            "decision",
-            "assumption",
-            "persona",
-            "competitor",
-            "market-signal",
-            "opportunity",
-            "risk",
-            "feature-idea",
+            "insight", "decision", "assumption", "persona", "competitor",
+            "market-signal", "opportunity", "risk", "feature-idea",
             "research-source"
           ]
         },
-        "title": {
-          "type": "string",
-          "description": "Short, human-scannable label for the record.",
-          "minLength": 1
-        },
+        "title": { "type": "string", "minLength": 1 },
         "summary": {
           "type": "string",
-          "description": "One to a few sentences capturing the substance of the record.",
-          "minLength": 1
+          "minLength": 1,
+          "description": "One to a few sentences. For structured types (decision, persona, competitor), this is a human-scannable headline — the substance lives in `data`, not here."
         },
         "details": {
           "type": "string",
-          "description": "Optional longer-form Markdown body with full context, elaboration, or supporting narrative."
+          "description": "Optional free-form narrative/elaboration. Never the only place a downstream skill has to look for a required field — required fields belong in `data`."
         },
-        "tags": {
-          "type": "array",
-          "description": "Free-form labels for filtering and grouping (e.g. project or theme names).",
-          "items": { "type": "string" },
-          "default": []
+        "data": {
+          "type": "object",
+          "description": "Type-specific structured payload. Shape is required to match `type` — see the conditional rules below. Kept generic here so new types can be added without touching this schema, but decision and assumption have concrete required shapes as the ones already in active use."
         },
+        "tags": { "type": "array", "items": { "type": "string" }, "default": [] },
         "status": {
           "type": "string",
-          "description": "Current lifecycle state of the record. Prefer updating status over deleting records, so the history of what was believed stays intact.",
           "enum": ["draft", "active", "validated", "invalidated", "deprecated"]
         },
-        "confidence": {
-          "type": "string",
-          "description": "How much this record should be trusted absent further validation.",
-          "enum": ["low", "medium", "high"]
-        },
+        "confidence": { "type": "string", "enum": ["low", "medium", "high"] },
         "sources": {
           "type": "array",
-          "description": "Evidence this record is based on, so claims stay traceable.",
           "items": {
             "type": "object",
             "required": ["label"],
             "additionalProperties": false,
             "properties": {
-              "label": {
-                "type": "string",
-                "description": "Human-readable name of the source (e.g. \"Customer interview - Acme Corp, 2026-07-14\")."
-              },
-              "reference": {
-                "type": "string",
-                "description": "URL, file path, or other pointer to the source material."
-              }
+              "label": { "type": "string" },
+              "reference": { "type": "string" }
             }
           },
           "default": []
         },
-        "related_ids": {
-          "type": "array",
-          "description": "IDs of other records this one relates to, supports, or was derived from. Use this to link records instead of duplicating their content.",
-          "items": { "type": "string" },
-          "default": []
-        },
-        "owner": {
+        "related_ids": { "type": "array", "items": { "type": "string" }, "default": [] },
+        "owner": { "type": "string" },
+        "session_id": { "type": "string" },
+        "project_id": {
           "type": "string",
-          "description": "Name of the skill or agent that created or last materially updated this record."
+          "description": "Unused for now: memory stores are one-per-project (see memory/README.md), so the store's file path already identifies the project and this field has no reason to be set. Kept in the schema only in case a future need for a single multi-project store arises — do not populate it until that's a real, adopted change."
         },
-        "session_id": {
-          "type": "string",
-          "description": "Optional identifier for the Claude Code session that produced this record, for traceability."
+        "created_at": { "type": "string", "format": "date-time" },
+        "updated_at": { "type": "string", "format": "date-time" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "const": "decision" } } },
+          "then": {
+            "properties": {
+              "data": {
+                "type": "object",
+                "required": ["alternatives_considered", "recommendation", "rationale"],
+                "properties": {
+                  "alternatives_considered": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "object",
+                      "required": ["option"],
+                      "properties": {
+                        "option": { "type": "string" },
+                        "pros": { "type": "array", "items": { "type": "string" } },
+                        "cons": { "type": "array", "items": { "type": "string" } },
+                        "rejected_because": { "type": "string" }
+                      }
+                    }
+                  },
+                  "recommendation": { "type": "string", "minLength": 1 },
+                  "rationale": { "type": "string", "minLength": 1 },
+                  "open_questions": { "type": "array", "items": { "type": "string" }, "default": [] }
+                }
+              }
+            }
+          }
         },
-        "created_at": {
-          "type": "string",
-          "description": "ISO 8601 timestamp when the record was first created.",
-          "format": "date-time"
-        },
-        "updated_at": {
-          "type": "string",
-          "description": "ISO 8601 timestamp when the record was last modified.",
-          "format": "date-time"
+        {
+          "if": { "properties": { "type": { "const": "assumption" } } },
+          "then": {
+            "properties": {
+              "data": {
+                "type": "object",
+                "required": ["statement", "validation_status"],
+                "properties": {
+                  "statement": {
+                    "type": "string",
+                    "description": "The assumption itself, stated as a falsifiable claim, e.g. 'Support teams handle <5 tickets/week for this flow today.'"
+                  },
+                  "validation_status": {
+                    "type": "string",
+                    "enum": ["unvalidated", "validating", "validated", "invalidated"]
+                  },
+                  "impact_if_wrong": { "type": "string" }
+                }
+              }
+            }
+          }
         }
-      }
+      ]
     }
   }
 }
