@@ -11,8 +11,10 @@ template exists, add one here rather than formatting inline in the skill.
 
 ## Status
 
-Empty by design. No templates have been added yet — this repository is
-currently scaffolding only.
+One template exists: `capability-matrix.md`, used by `research-agent`
+(`.claude/agents/research-agent.md`) to render a comparison of the
+project's own stance against researched competitors. See
+`.claude/examples/research-agent/` for a filled-in example.
 
 ## Conventions
 

@@ -84,16 +84,20 @@ already scopes them.
 Records have a generic shape plus an optional `data` field for
 type-specific structured payloads. `data` is unconstrained for most
 types, but `schema.json` uses JSON Schema `if`/`then` rules to require a
-specific `data` shape for types where that shape is already load-bearing
-(`decision` needs `alternatives_considered`, `recommendation`, and
-`rationale`; `assumption` needs `statement` and `validation_status` — see
-`.claude/memory/README.md` for full examples). A skill that writes a
-`decision` or `assumption` record must populate `data` in that shape, not
-just narrate the equivalent content in `details` or `summary` — those
-fields are for human-readable framing, not for holding data another skill
-needs to parse.
+specific `data` shape for types where that shape is already load-bearing:
+`decision` needs `alternatives_considered`, `recommendation`, and
+`rationale`; `assumption` needs `statement` and `validation_status`;
+`research-source` needs `claim` (one specific, falsifiable finding, not a
+paraphrase of a whole source) and `retrieved_at`; `competitor` needs
+`product_name`, `positioning`, and `evidence_ids` (the `research-source`
+records backing the profile — see `.claude/memory/README.md` and
+`.claude/examples/research-agent/` for full examples). A skill or agent
+that writes one of these four types must populate `data` in its required
+shape, not just narrate the equivalent content in `details` or
+`summary` — those fields are for human-readable framing, not for holding
+data another skill needs to parse.
 
-When a skill needs a different type (e.g. `persona`, `competitor`) to
+When a skill needs a different type (e.g. `persona`, `market-signal`) to
 carry specific required fields, add a matching `if`/`then` block to
 `schema.json` at that point rather than inventing an ad hoc shape in the
 skill itself — don't add structure to a type before a skill actually

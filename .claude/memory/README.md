@@ -51,25 +51,35 @@ multi-project store arises, and should not be populated unless that
 change is explicitly adopted (which would also require updating this
 section). Skills and agents should not read or write `project_id` today.
 
-## Why `decision` and `assumption` require a `data` shape, and other types don't
+## Why some types require a `data` shape, and other types don't
 
 `schema.json` enforces a required structured shape (via `data`) only for
-`decision` and `assumption` records right now. That's not an oversight —
-it's because those are the two record types with an obvious, stable shape
-that's already in active use for how this platform reasons about
-discovery (a decision needs its alternatives and rationale to be useful
-later; an assumption needs to be a falsifiable statement with a
-validation status, or it isn't actionable).
+the record types that a real skill or agent already produces:
+`decision`, `assumption` (written by `discovery-interview`), and
+`research-source`, `competitor` (written by `research-agent`). That's not
+an oversight — each has an obvious, stable shape that's already load-bearing
+for how this platform reasons about discovery or research (a decision
+needs its alternatives and rationale to be useful later; an assumption
+needs to be a falsifiable statement with a validation status; a
+research-source needs one checkable claim and a retrieval date, not a
+vague paraphrase of an article; a competitor profile needs to name the
+product, state its positioning in its own words, and cite the
+research-source records backing it, or it isn't a profile — it's an
+opinion).
 
-The other types (`insight`, `persona`, `competitor`, `market-signal`,
-`opportunity`, `risk`, `feature-idea`, `research-source`) stay generic —
-`data` is optional and unconstrained for them — **on purpose**: we don't
-yet have a skill that produces or consumes those types, so we don't yet
-know their real required shape. Adding structure speculatively risks
-guessing wrong and having to break records already written. When a skill
-is built that needs one of these types to carry specific fields, add a
-matching `if`/`then` block to `schema.json` at that point — see
-`CONTRIBUTING.md`'s memory contract section.
+The other types (`insight`, `persona`, `market-signal`, `opportunity`,
+`risk`, `feature-idea`) stay generic — `data` is optional and
+unconstrained for them — **on purpose**: we don't yet have a skill that
+produces or consumes those types, so we don't yet know their real
+required shape. Adding structure speculatively risks guessing wrong and
+having to break records already written. When a skill is built that needs
+one of these types to carry specific fields, add a matching `if`/`then`
+block to `schema.json` at that point — see `CONTRIBUTING.md`'s memory
+contract section.
+
+For fully-populated `research-source` and `competitor` examples, see
+`.claude/examples/research-agent/` — they're worked out there rather than
+duplicated here, alongside the agent that actually produces them.
 
 ## Example records
 
@@ -186,10 +196,10 @@ require a `data` shape" above.
   (size, ownership, access pattern) that justifies it.
 - Every record requires `id`, `type`, `title`, `summary`, `status`,
   `confidence`, `created_at`, and `updated_at` at minimum — see
-  `schema.json` for the full field list and allowed values. `decision` and
-  `assumption` records additionally require a `data` object with a
-  specific shape — see the examples above and `schema.json`'s `allOf`
-  rules.
+  `schema.json` for the full field list and allowed values. `decision`,
+  `assumption`, `research-source`, and `competitor` records additionally
+  require a `data` object with a specific shape — see the examples above,
+  `.claude/examples/research-agent/`, and `schema.json`'s `allOf` rules.
 - Use `related_ids` to link records instead of duplicating content across
   them (e.g. link a `feature-idea` to the `insight` records that motivated
   it, or an `assumption` to the `insight` that raised it, as in the
