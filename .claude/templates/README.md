@@ -11,10 +11,17 @@ template exists, add one here rather than formatting inline in the skill.
 
 ## Status
 
-One template exists: `capability-matrix.md`, used by `research-agent`
-(`.claude/agents/research-agent.md`) to render a comparison of the
-project's own stance against researched competitors. See
-`.claude/examples/research-agent/` for a filled-in example.
+Two templates exist:
+
+- `capability-matrix.md`, used by `research-agent`
+  (`.claude/agents/research-agent.md`) to render a comparison of the
+  project's own stance against researched competitors. See
+  `.claude/examples/research-agent/` for a filled-in example.
+- `product-decision-document.md`, used by `documentation-agent`
+  (`.claude/agents/documentation-agent.md`) to render a project's entire
+  memory store into a fixed 35-section document, with an explicit
+  "Not available" line for every section the store can't support. See
+  `.claude/examples/documentation-agent/` for a filled-in example.
 
 ## Conventions
 

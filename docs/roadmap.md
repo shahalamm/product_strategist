@@ -42,15 +42,23 @@ The platform is built one skill/agent at a time, narrow before wide, per
    severity. Stops and asks for `solution-design` to run first if the
    target decision has no requirements yet. Identifies impact only —
    never proposes a mitigation, a fix, or a new requirement/decision.
+7. **`documentation-agent`** (agent) — takes no target id; reads a
+   project's *entire* memory store and renders it against a fixed
+   35-section canonical Product Decision Document structure. Writes zero
+   memory records — the one agent whose only output is a document.
+   Sections the store can't support with real records say so plainly
+   ("Not available — no `X` records exist yet") rather than being
+   omitted or padded; a final Document Coverage table reports
+   populated/partial/not-available across all 35, which is the actual
+   test of whether the other six agents' records compose into something
+   coherent.
 
 ## Still to come
 
-Only one skill/agent from the original vision remains unbuilt:
+All seven pieces of the original vision are now built. The core
+discovery → research → strategy → solution-design → systems-impact →
+documentation loop is complete end to end for a single project.
 
-- **documentation-agent** — renders the artifacts this platform is meant
-  to produce (briefs, PRDs, personas, roadmaps) from accumulated memory.
-  Not built yet.
-
-When it's built, it follows the same pattern as the ones above:
-scaffolded first if needed, then implemented only when explicitly
-requested, per `CONTRIBUTING.md`.
+The next horizon is a parked UI track — a way to interact with this
+platform outside a Claude Code conversation — noted here as a pointer to
+future work, not started or designed in this repository.
