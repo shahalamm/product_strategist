@@ -78,6 +78,20 @@
       "updated_at": "2026-08-10T00:00:00Z"
     },
     {
+      "id": "insight-2026-08-10-client-defined-conversion-ratio",
+      "type": "insight",
+      "title": "Conversion ratio/method is defined per client, not fixed platform-wide",
+      "summary": "Each client (e.g. a bank) defines the points conversion approach for its own card variant pairs. Cited examples: a fixed percentage ratio (e.g. 70%), keeping point count equal, and keeping point value equal. The feature must support all of these as client-configurable options, not a single hardcoded formula.",
+      "status": "active",
+      "confidence": "high",
+      "tags": ["rewards", "conversion-ratio", "constraint", "multi-client"],
+      "sources": [],
+      "related_ids": ["decision-2026-08-10-generalized-platform-feature"],
+      "owner": "discovery-interview",
+      "created_at": "2026-08-10T00:00:00Z",
+      "updated_at": "2026-08-10T00:00:00Z"
+    },
+    {
       "id": "insight-2026-08-10-bidirectional-scope",
       "type": "insight",
       "title": "Feature scope covers both upgrade and downgrade",
