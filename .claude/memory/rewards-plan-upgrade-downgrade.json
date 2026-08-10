@@ -165,6 +165,20 @@
       "updated_at": "2026-08-10T00:00:00Z"
     },
     {
+      "id": "insight-2026-08-10-same-day-sla",
+      "type": "insight",
+      "title": "Same-day processing is an acceptable latency for migration",
+      "summary": "Points migration does not need to happen in real time. Completing within the same business day the card-variant-change event fires is acceptable.",
+      "status": "active",
+      "confidence": "medium",
+      "tags": ["rewards", "constraint", "sla"],
+      "sources": [],
+      "related_ids": ["insight-2026-08-10-existing-trigger-event", "insight-2026-08-10-success-criteria-reconciliation"],
+      "owner": "discovery-interview",
+      "created_at": "2026-08-10T00:00:00Z",
+      "updated_at": "2026-08-10T00:00:00Z"
+    },
+    {
       "id": "insight-2026-08-10-bidirectional-scope",
       "type": "insight",
       "title": "Feature scope covers both upgrade and downgrade",
