@@ -111,6 +111,20 @@
       "updated_at": "2026-08-10T00:00:00Z"
     },
     {
+      "id": "insight-2026-08-10-existing-trigger-event",
+      "type": "insight",
+      "title": "Card variant change is already published as an event by an internal system",
+      "summary": "When a customer's card variant changes (upgrade or downgrade), an internal system already publishes an event for it. The platform feature can react to this existing event rather than needing to detect the card variant change itself.",
+      "status": "active",
+      "confidence": "medium",
+      "tags": ["rewards", "constraint", "event-driven"],
+      "sources": [],
+      "related_ids": ["insight-2026-08-10-manual-points-migration"],
+      "owner": "discovery-interview",
+      "created_at": "2026-08-10T00:00:00Z",
+      "updated_at": "2026-08-10T00:00:00Z"
+    },
+    {
       "id": "insight-2026-08-10-bidirectional-scope",
       "type": "insight",
       "title": "Feature scope covers both upgrade and downgrade",
