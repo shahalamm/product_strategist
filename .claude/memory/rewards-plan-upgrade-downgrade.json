@@ -151,6 +151,20 @@
       "updated_at": "2026-08-10T00:00:00Z"
     },
     {
+      "id": "insight-2026-08-10-no-partial-failure-concern",
+      "type": "insight",
+      "title": "Partial/failed migration is not seen as a significant concern",
+      "summary": "The user does not consider a migration failing partway (customer left without correct old-card debit or new-card credit) to be a significant risk here, distinct from the customer-dispute risk already identified.",
+      "status": "active",
+      "confidence": "medium",
+      "tags": ["rewards", "risk"],
+      "sources": [],
+      "related_ids": ["risk-2026-08-10-customer-dispute"],
+      "owner": "discovery-interview",
+      "created_at": "2026-08-10T00:00:00Z",
+      "updated_at": "2026-08-10T00:00:00Z"
+    },
+    {
       "id": "insight-2026-08-10-bidirectional-scope",
       "type": "insight",
       "title": "Feature scope covers both upgrade and downgrade",
