@@ -701,6 +701,123 @@
       "owner": "systems-impact",
       "created_at": "2026-08-10T10:40:00Z",
       "updated_at": "2026-08-10T10:40:00Z"
+    },
+    {
+      "id": "decision-2026-08-10-conversion-rounding-precision-rule",
+      "type": "decision",
+      "title": "Adopt round-half-to-even plus per-client remainder tracking as the platform's point-conversion rounding rule",
+      "summary": "Chose a defined rounding rule (round-half-to-even to the nearest whole point) combined with a per-client rounding-remainder tracking mechanism, over round-half-up, round-down, or extending the points ledger to fractional precision, to resolve both the undefined per-migration precision and the aggregate portfolio-liability drift risk.",
+      "status": "active",
+      "confidence": "medium",
+      "data": {
+        "alternatives_considered": [
+          {
+            "option": "Round-half-up to nearest whole point, applied uniformly as the platform's defined precision rule for all conversion methods",
+            "pros": [
+              "Simplest rule to implement and explain to clients and Ops",
+              "Directly defines 'exact...within the method's defined precision' for requirement-2026-08-10-exact-points-reconciliation"
+            ],
+            "cons": [
+              "Ties (exact .5 fractions) always round upward, a small but real directional bias baked into the rule itself",
+              "No mechanism to detect or verify that fractional remainders are actually close to evenly distributed across the balances migrated at insight-2026-08-10-migration-volume's scale \u2014 the near-neutrality is an assumption, not a measured fact"
+            ],
+            "rejected_because": "Leaves risk-2026-08-10-systematic-rounding-bias unaddressed at the monitoring level \u2014 it assumes aggregate drift is small without any way to catch it if that assumption is wrong.",
+            "impact": {
+              "customer_impact": "Customer receives the mathematically rounded amount; ties always round in the customer's favor, which is neutral-to-slightly-positive and explainable as a standard rule.",
+              "business_impact": "Simplest rule to communicate to clients configuring fixed-percentage methods; assumes (strategy-agent's judgment, not evidence) fractional remainders are close to uniformly distributed across the ~500/month-and-growing migrations in insight-2026-08-10-migration-volume, but this is never verified.",
+              "engineering_complexity": "low",
+              "operational_complexity": "low",
+              "scalability_risk": "At current volume, undetected minor bias is immaterial, but risk-2026-08-10-systematic-rounding-bias flags this compounds as volume grows into the thousands (insight-2026-08-10-migration-volume) with no monitoring in place to catch it.",
+              "long_term_maintainability": "Simple and well-understood, but leaves the aggregate-drift question in risk-2026-08-10-systematic-rounding-bias permanently unanswered rather than resolved."
+            }
+          },
+          {
+            "option": "Round down (truncate) to nearest whole point, always in the platform's favor",
+            "pros": [
+              "Simplest possible rule; guarantees the platform never credits more points than the exact computed value",
+              "Easy to audit and explain as a conservative default"
+            ],
+            "cons": [
+              "Deterministically realizes the systematic bias risk-2026-08-10-systematic-rounding-bias describes as hypothetical, in the customer-unfavorable direction, on every single fractional migration",
+              "Every fractional migration credits strictly less than the exact computed value, directly feeding risk-2026-08-10-customer-dispute"
+            ],
+            "rejected_because": "This doesn't merely risk the systematic bias risk-2026-08-10-systematic-rounding-bias flags \u2014 it guarantees it, from day one, at full migration volume, in the direction least favorable to customers.",
+            "impact": {
+              "customer_impact": "Customer always receives strictly less than the exact computed value; every fractional migration is customer-unfavorable, consistently 'short' relative to the advertised conversion percentage.",
+              "business_impact": "Guarantees no over-crediting, attractive for pure liability-avoidance, but (strategy-agent's judgment, not evidence) risks being read as systematically extracting value from customers on every migration if the pattern is noticed \u2014 a reputational exposure beyond the accounting one in risk-2026-08-10-systematic-rounding-bias.",
+              "engineering_complexity": "low",
+              "operational_complexity": "low",
+              "scalability_risk": "Realizes risk-2026-08-10-systematic-rounding-bias deterministically at full volume; compounds directly with insight-2026-08-10-migration-volume's projected growth into the thousands per month.",
+              "long_term_maintainability": "Simple technically, but the aggregate customer-unfavorable drift it produces is a standing liability/reputational question that only grows with volume, never resolves itself."
+            }
+          },
+          {
+            "option": "Extend the points ledger to store fractional point balances (e.g., 2 decimal places), eliminating rounding at migration time entirely",
+            "pros": [
+              "No point value is ever lost or gained at migration \u2014 satisfies requirement-2026-08-10-exact-points-reconciliation's exactness clause most literally of any option",
+              "Removes risk-2026-08-10-systematic-rounding-bias entirely at the migration step: no rounding, no directional bias"
+            ],
+            "cons": [
+              "(strategy-agent's judgment, not evidence) likely just relocates the same undefined-precision problem to wherever points are later redeemed or displayed to the customer, which no requirement in this store scopes",
+              "Touches the core points ledger data model and every downstream consumer of point balances, including the new audit record in system-impact-2026-08-10-audit-record-data-model, none of which are confirmed to already support fractional values"
+            ],
+            "rejected_because": "Trades a scoped, definable rounding-rule decision for an open-ended ledger-precision migration with unscoped downstream blast radius, and doesn't actually eliminate the need for a rounding rule \u2014 it just moves the same problem to redemption time.",
+            "impact": {
+              "customer_impact": "No point value is ever lost or gained at migration time \u2014 customers see the literal computed value.",
+              "business_impact": "Removes point-conversion rounding as an accounting exposure at the migration step, but (strategy-agent's judgment, not evidence) likely relocates the same undefined-precision problem to redemption or display time instead of resolving it.",
+              "engineering_complexity": "high \u2014 (strategy-agent's judgment, not evidence) touches the ledger's core data model and every downstream consumer of point balances (audit record in system-impact-2026-08-10-audit-record-data-model, customer-facing displays, redemption logic).",
+              "operational_complexity": "medium \u2014 no new manual review queue, but Ops/Support would need to explain fractional balances to customers, a new communication pattern versus today's whole-point balances.",
+              "scalability_risk": "Low ongoing risk once built since there's no rounding calculation to drift, but the initial ledger-precision change itself is a scale risk given insight-2026-08-10-migration-volume's growth means this would need to be correct before volume grows further.",
+              "long_term_maintainability": "Most durable fix for the rounding question specifically, but introduces a much larger, less-scoped surface area to maintain for a problem that may not have needed full ledger-level precision to solve."
+            }
+          },
+          {
+            "option": "Round-half-to-even (banker's rounding) to the nearest whole point as the defined precision rule, combined with a per-client rounding-remainder tracking record for periodic finance reconciliation",
+            "pros": [
+              "Removes the directional tie-bias round-half-up (Option 1) has, giving the closest thing to a statistically neutral per-migration rule without extending ledger precision (Option 3)",
+              "Directly answers requirement-2026-08-10-exact-points-reconciliation's undefined 'precision' with a specific, standard, auditable rule",
+              "The remainder-tracking addition makes aggregate drift observable and reconcilable rather than assuming neutrality \u2014 directly targets risk-2026-08-10-systematic-rounding-bias's actual concern"
+            ],
+            "cons": [
+              "Adds a new deliverable (the remainder-tracking record/report) beyond a rounding rule alone \u2014 more scope than Options 1 or 2",
+              "(strategy-agent's judgment, not evidence) the remainder-tracking mechanism's owner and reconciliation cadence are not yet defined by any requirement in this store"
+            ],
+            "impact": {
+              "customer_impact": "Customer receives a standard, statistically neutral rounding outcome with no directional favoritism baked into the rule, reducing the chance a dispute (risk-2026-08-10-customer-dispute) reflects a systematic pattern rather than a one-off.",
+              "business_impact": "Directly defines the 'precision' requirement-2026-08-10-exact-points-reconciliation left undefined, and gives Finance a concrete, per-client record of cumulative rounding remainder to reconcile against \u2014 turning risk-2026-08-10-systematic-rounding-bias from an unmonitored hypothetical into a measured, reviewable quantity.",
+              "engineering_complexity": "medium \u2014 the rounding rule itself is low complexity (same order as Options 1/2), but the added per-client remainder-tracking mechanism (strategy-agent's judgment, not evidence) is new logic beyond what any current requirement in this store scopes.",
+              "operational_complexity": "medium \u2014 creates a new artifact needing a defined owner and reconciliation cadence, similar in kind to the exception queue already flagged in system-impact-2026-08-10-conversion-exception-queue, though this decision doesn't itself assign that owner.",
+              "scalability_risk": "Directly targets risk-2026-08-10-systematic-rounding-bias: as volume grows from ~500/month into the thousands (insight-2026-08-10-migration-volume), the tracked remainder makes any emerging drift visible and reconcilable before it becomes a large, undetected accounting discrepancy.",
+              "long_term_maintainability": "Adds one recurring operational process (remainder reconciliation) that must be sustained, but resolves both the per-migration precision question and the aggregate-drift risk in the same decision, rather than leaving one open the way Options 1-3 each do."
+            }
+          }
+        ],
+        "recommendation": "Define the platform's point-conversion precision rule as round-half-to-even to the nearest whole point, and add a per-client rounding-remainder tracking record that accumulates the difference between each migration's exact computed value and its rounded credited amount, for periodic finance reconciliation.",
+        "rationale": "This directly resolves system-impact-2026-08-10-conversion-rounding-precision (no precision rule was defined anywhere, leaving requirement-2026-08-10-exact-points-reconciliation's 'exact...within the method's defined precision' clause unsatisfiable) by naming round-half-to-even as that defined rule. It also directly addresses risk-2026-08-10-systematic-rounding-bias, which is specifically about aggregate, portfolio-level drift, not just per-migration exactness: round-half-to-even removes the one directional bias source a simpler round-half-up rule (Option 1) would still carry, and the added per-client remainder-tracking gives Finance a way to detect drift empirically rather than relying on an unverified assumption that fractional remainders are evenly distributed across migrations \u2014 an assumption none of Options 1-3 actually validate, they only differ in whether that assumption's failure would be visible. This also reduces risk-2026-08-10-customer-dispute's likelihood indirectly: with no built-in directional favoritism, a customer's dispute about their credited amount is more likely a one-off or a genuine config error the audit trail in requirement-2026-08-10-migration-audit-trail can investigate, rather than a symptom of a systematic shortfall, unlike Option 2's guaranteed under-crediting. This recommendation rests on one unvalidated assumption of its own, disclosed rather than presented as settled: that a remainder-tracking mechanism at the per-client level is buildable within the feature's existing scope and doesn't require the larger ledger-precision change of Option 3 \u2014 that scoping hasn't been validated against solution-design's actual implementation.",
+        "open_questions": [
+          "What reconciliation cadence and owner (Finance vs Ops) should review the per-client rounding-remainder record, and what drift threshold should trigger action? Not defined by this decision.",
+          "Should any client be allowed to override round-half-to-even with a different rule (e.g. a contractually required round-in-customer's-favor policy)? Ties to assumption-2026-08-10-conversion-methods-exhaustive, itself still unvalidated against real client requirements.",
+          "Is a per-client remainder-tracking record a new requirement solution-design needs to scope separately, or can it extend the audit record already required in requirement-2026-08-10-migration-audit-trail? Not resolved here.",
+          "Do the equal-point-count or equal-point-value conversion methods (insight-2026-08-10-client-defined-conversion-ratio) ever produce fractional results the way fixed-percentage does, or is this rounding rule only actually exercised by the fixed-percentage method? Not confirmed against those other two methods."
+        ]
+      },
+      "tags": [
+        "rewards",
+        "conversion-ratio",
+        "rounding",
+        "strategy-recommendation"
+      ],
+      "sources": [],
+      "related_ids": [
+        "system-impact-2026-08-10-conversion-rounding-precision",
+        "risk-2026-08-10-systematic-rounding-bias",
+        "requirement-2026-08-10-exact-points-reconciliation",
+        "risk-2026-08-10-customer-dispute",
+        "insight-2026-08-10-migration-volume"
+      ],
+      "owner": "strategy-agent",
+      "created_at": "2026-08-10T11:00:00Z",
+      "updated_at": "2026-08-10T11:00:00Z"
     }
   ]
 }
