@@ -64,6 +64,20 @@
       "updated_at": "2026-08-10T00:00:00Z"
     },
     {
+      "id": "insight-2026-08-10-migration-volume",
+      "type": "insight",
+      "title": "Current manual migration volume is ~500/month, expected to grow into the thousands",
+      "summary": "Ops currently processes roughly 500 card upgrade/downgrade reward point migrations manually per month. Volume is expected to grow into the thousands as the platform scales, which Ops cannot handle manually at that level.",
+      "status": "active",
+      "confidence": "medium",
+      "tags": ["rewards", "ops-scaling", "evidence"],
+      "sources": [],
+      "related_ids": ["insight-2026-08-10-roadmap-and-scaling-driver"],
+      "owner": "discovery-interview",
+      "created_at": "2026-08-10T00:00:00Z",
+      "updated_at": "2026-08-10T00:00:00Z"
+    },
+    {
       "id": "insight-2026-08-10-bidirectional-scope",
       "type": "insight",
       "title": "Feature scope covers both upgrade and downgrade",
