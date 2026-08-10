@@ -191,6 +191,151 @@
       "owner": "discovery-interview",
       "created_at": "2026-08-10T00:00:00Z",
       "updated_at": "2026-08-10T00:00:00Z"
+    },
+    {
+      "id": "requirement-2026-08-10-automatic-migration-trigger",
+      "type": "requirement",
+      "title": "Migration is triggered automatically by the existing card-variant-change event",
+      "summary": "The platform automatically initiates a reward points migration whenever the existing card-variant-change event fires, for both upgrades and downgrades, with no manual Ops step.",
+      "status": "active",
+      "confidence": "high",
+      "data": {
+        "statement": "The system automatically initiates a reward points migration whenever the existing card-variant-change event fires, for both upgrades and downgrades, without requiring manual Ops action.",
+        "acceptance_criteria": [
+          "When the internal system publishes a card-variant-change event for a customer (upgrade or downgrade), the platform initiates a points migration for that customer without any manual Ops step.",
+          "Every published card-variant-change event results in either a completed migration or a flagged failure requiring review — none are silently dropped."
+        ],
+        "edge_cases": [
+          "(solution-design's judgment, not evidence) If a card-variant-change event references a card variant pair with no conversion method configured by the client, the migration is not silently skipped or defaulted — it is flagged for manual review, since guessing a method would contradict the exact-reconciliation success criterion in insight-2026-08-10-success-criteria-reconciliation."
+        ],
+        "elaborates_decision_id": "decision-2026-08-10-generalized-platform-feature"
+      },
+      "details": "Implements the core of decision-2026-08-10-generalized-platform-feature's recommendation to replace the manual Ops process (insight-2026-08-10-manual-points-migration) by reacting to the event already published today (insight-2026-08-10-existing-trigger-event). This automation is what addresses the scaling concern raised in insight-2026-08-10-roadmap-and-scaling-driver and insight-2026-08-10-migration-volume (~500/month today, expected to grow into the thousands).",
+      "tags": ["rewards", "card-upgrade", "card-downgrade"],
+      "sources": [],
+      "related_ids": [
+        "decision-2026-08-10-generalized-platform-feature",
+        "insight-2026-08-10-manual-points-migration",
+        "insight-2026-08-10-existing-trigger-event",
+        "insight-2026-08-10-roadmap-and-scaling-driver",
+        "insight-2026-08-10-migration-volume"
+      ],
+      "owner": "solution-design",
+      "created_at": "2026-08-10T09:00:00Z",
+      "updated_at": "2026-08-10T09:00:00Z"
+    },
+    {
+      "id": "requirement-2026-08-10-configurable-conversion-method",
+      "type": "requirement",
+      "title": "Conversion method is configurable per client, per card variant pair",
+      "summary": "Each client configures which conversion method applies to a given card variant pair — fixed percentage, equal point count, or equal point value — and migrations apply whichever method is configured for that specific pair.",
+      "status": "active",
+      "confidence": "high",
+      "data": {
+        "statement": "For each card variant pair, the client configures which conversion method applies — fixed percentage, equal point count, or equal point value — and the migration applies whichever method is configured for that exact pair.",
+        "acceptance_criteria": [
+          "A client can configure, per card variant pair, exactly one method: a fixed conversion percentage, an equal-point-count method, or an equal-point-value method.",
+          "When a migration runs for a given card variant pair, it applies the method configured for that exact pair rather than a platform-wide default.",
+          "Two different clients can configure different conversion methods for otherwise-identical card variant pairs without one client's configuration affecting the other's."
+        ],
+        "elaborates_decision_id": "decision-2026-08-10-generalized-platform-feature"
+      },
+      "details": "Carries forward the caveat in assumption-2026-08-10-conversion-methods-exhaustive: the three methods implemented here (fixed percentage, equal point count, equal point value) are anticipated by the user, not yet validated against real client requirements (insight-2026-08-10-client-defined-conversion-ratio). If a client's real requirement doesn't fit one of these three methods, this requirement will need to be revisited — that gap is not resolved here, only built as currently scoped.",
+      "tags": ["rewards", "conversion-ratio", "multi-client"],
+      "sources": [],
+      "related_ids": [
+        "decision-2026-08-10-generalized-platform-feature",
+        "insight-2026-08-10-client-defined-conversion-ratio",
+        "assumption-2026-08-10-conversion-methods-exhaustive"
+      ],
+      "owner": "solution-design",
+      "created_at": "2026-08-10T09:05:00Z",
+      "updated_at": "2026-08-10T09:05:00Z"
+    },
+    {
+      "id": "requirement-2026-08-10-exact-points-reconciliation",
+      "type": "requirement",
+      "title": "Migrated point balance reconciles exactly to the configured conversion method",
+      "summary": "After a migration completes, the old card's full point balance is debited and the new card is credited with exactly the value the configured conversion method computes from it — no discrepancy.",
+      "status": "active",
+      "confidence": "high",
+      "data": {
+        "statement": "After a migration completes, the points debited from the old card equal its full pre-migration balance, and the points credited to the new card equal exactly the value the client's configured conversion method computes from that debited amount.",
+        "acceptance_criteria": [
+          "The old card's point balance after migration is zero (its full pre-migration balance was debited).",
+          "The new card's credited amount matches the value computed by applying the configured conversion method to the debited amount, with no rounding or calculation discrepancy beyond the method's defined precision.",
+          "Given the same starting balance and the same configured method, repeating the calculation produces the identical credited amount every time."
+        ],
+        "elaborates_decision_id": "decision-2026-08-10-generalized-platform-feature"
+      },
+      "details": "Directly implements the success criterion captured in insight-2026-08-10-success-criteria-reconciliation: exact reconciliation per the client's chosen method. Exactness here is what determines whether risk-2026-08-10-customer-dispute materializes, since a mismatch between the expected and received amount is the disputed condition itself.",
+      "tags": ["rewards", "success-criteria"],
+      "sources": [],
+      "related_ids": [
+        "decision-2026-08-10-generalized-platform-feature",
+        "insight-2026-08-10-success-criteria-reconciliation",
+        "risk-2026-08-10-customer-dispute"
+      ],
+      "owner": "solution-design",
+      "created_at": "2026-08-10T09:10:00Z",
+      "updated_at": "2026-08-10T09:10:00Z"
+    },
+    {
+      "id": "requirement-2026-08-10-same-day-processing-sla",
+      "type": "requirement",
+      "title": "Migration completes within the same business day as the triggering event",
+      "summary": "Every points migration completes within the same business day the triggering card-variant-change event was published; real-time processing is not required.",
+      "status": "active",
+      "confidence": "medium",
+      "data": {
+        "statement": "Every points migration completes within the same business day the triggering card-variant-change event was published.",
+        "acceptance_criteria": [
+          "For a card-variant-change event published on a given business day, the corresponding migration (old card debited, new card credited) completes before that business day ends.",
+          "Migration is not required to complete in real time or within minutes of the event; same-business-day completion satisfies this requirement."
+        ],
+        "edge_cases": [
+          "(solution-design's judgment, not evidence) An event published outside business hours or on a non-business day is processed by the end of the next business day, since same-day completion has no defined meaning outside a business day."
+        ],
+        "elaborates_decision_id": "decision-2026-08-10-generalized-platform-feature"
+      },
+      "details": "Implements insight-2026-08-10-same-day-sla, which established that real-time processing is not required.",
+      "tags": ["rewards", "sla"],
+      "sources": [],
+      "related_ids": [
+        "decision-2026-08-10-generalized-platform-feature",
+        "insight-2026-08-10-same-day-sla",
+        "insight-2026-08-10-existing-trigger-event"
+      ],
+      "owner": "solution-design",
+      "created_at": "2026-08-10T09:15:00Z",
+      "updated_at": "2026-08-10T09:15:00Z"
+    },
+    {
+      "id": "requirement-2026-08-10-migration-audit-trail",
+      "type": "requirement",
+      "title": "Every migration produces a retrievable audit record for dispute investigation",
+      "summary": "Every completed migration produces a retrievable record of the old balance, new balance, conversion method applied, and timestamp, sufficient to investigate a customer's dispute about the amount they received.",
+      "status": "active",
+      "confidence": "medium",
+      "data": {
+        "statement": "Every points migration produces a retrievable record of the pre-migration balance, post-migration balance, the specific conversion method and parameters applied, and the completion timestamp.",
+        "acceptance_criteria": [
+          "For any completed migration, the pre-migration balance, post-migration balance, the conversion method and parameters applied (e.g. which percentage, or which method type), and the completion timestamp can be retrieved by card or customer identifier.",
+          "The audit record is created and retained at migration time, independent of whether a dispute is ever raised — not generated on-demand only after a dispute occurs."
+        ],
+        "elaborates_decision_id": "decision-2026-08-10-generalized-platform-feature"
+      },
+      "details": "(solution-design's judgment, not evidence) risk-2026-08-10-customer-dispute identifies customer disputes over the migrated amount as the primary risk. Resolving a dispute requires being able to show what happened and why; without a retrievable per-migration record, a dispute can only be asserted, not investigated. This requirement doesn't attempt to prevent disputes — that's what requirement-2026-08-10-exact-points-reconciliation targets — it makes disputes that do occur investigable.",
+      "tags": ["rewards", "risk", "customer-dispute"],
+      "sources": [],
+      "related_ids": [
+        "decision-2026-08-10-generalized-platform-feature",
+        "risk-2026-08-10-customer-dispute",
+        "insight-2026-08-10-success-criteria-reconciliation"
+      ],
+      "owner": "solution-design",
+      "created_at": "2026-08-10T09:20:00Z",
+      "updated_at": "2026-08-10T09:20:00Z"
     }
   ]
 }
