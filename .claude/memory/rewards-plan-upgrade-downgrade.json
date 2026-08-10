@@ -18,8 +18,8 @@
     {
       "id": "decision-2026-08-10-generalized-platform-feature",
       "type": "decision",
-      "title": "Build a generalized platform feature for reward migration on card upgrade, not a per-case fix",
-      "summary": "Chose to pursue a platform feature that automates reward point migration for any credit card variant upgrade, rather than continuing the current manual, Ops-driven, per-case process.",
+      "title": "Build a generalized platform feature for reward migration on card upgrade or downgrade, not a per-case fix",
+      "summary": "Chose to pursue a platform feature that automates reward point migration for any credit card variant change — upgrade or downgrade — rather than continuing the current manual, Ops-driven, per-case process.",
       "status": "active",
       "confidence": "medium",
       "data": {
@@ -27,25 +27,38 @@
           {
             "option": "Continue current manual Ops process (debit old card, credit new card per conversion ratio, handled case-by-case)",
             "pros": ["No build cost", "Already working today"],
-            "cons": ["Doesn't scale across all card variant pairs", "Manual, so slower and error-prone", "Ops-dependent for every upgrade"],
-            "rejected_because": "User wants a platform capability that works for any credit card upgrade, not a per-pair manual workaround."
+            "cons": ["Doesn't scale across all card variant pairs", "Manual, so slower and error-prone", "Ops-dependent for every upgrade or downgrade"],
+            "rejected_because": "User wants a platform capability that works for any credit card variant change, not a per-pair manual workaround."
           },
           {
-            "option": "Build a generalized platform feature that automates reward migration for any credit card upgrade",
-            "pros": ["Scales to any card variant pair without new Ops work per pair", "Removes manual handling and its error surface"],
-            "cons": ["Requires defining conversion ratio logic generically across all variant pairs", "Scope and edge cases not yet fully known"]
+            "option": "Build a generalized platform feature that automates reward migration for any credit card upgrade or downgrade",
+            "pros": ["Scales to any card variant pair, either direction, without new Ops work per pair", "Removes manual handling and its error surface"],
+            "cons": ["Requires defining conversion ratio logic generically across all variant pairs and both directions", "Scope and edge cases not yet fully known"]
           }
         ],
-        "recommendation": "Build a platform feature that automates reward point migration for any credit card variant upgrade, replacing the manual Ops process.",
-        "rationale": "The user explicitly stated the goal is a platform feature that works for any credit card upgrade, not a one-off fix for a single card pair, to remove Ops from the manual debit/credit loop.",
+        "recommendation": "Build a platform feature that automates reward point migration for any credit card variant change, upgrade or downgrade, replacing the manual Ops process.",
+        "rationale": "The user explicitly stated the goal is a platform feature that works for any credit card upgrade, and confirmed downgrade is in scope too — not a one-off fix for a single card pair or direction, to remove Ops from the manual debit/credit loop.",
         "open_questions": [
-          "Is downgrade (moving to a lower variant) in scope, or is this upgrade-only for now?",
           "How is the points conversion ratio determined per card variant pair, and where does that data live today?"
         ]
       },
-      "tags": ["rewards", "card-upgrade", "scope"],
+      "tags": ["rewards", "card-upgrade", "card-downgrade", "scope"],
       "sources": [],
-      "related_ids": ["insight-2026-08-10-manual-points-migration"],
+      "related_ids": ["insight-2026-08-10-manual-points-migration", "insight-2026-08-10-bidirectional-scope"],
+      "owner": "discovery-interview",
+      "created_at": "2026-08-10T00:00:00Z",
+      "updated_at": "2026-08-10T00:00:00Z"
+    },
+    {
+      "id": "insight-2026-08-10-bidirectional-scope",
+      "type": "insight",
+      "title": "Feature scope covers both upgrade and downgrade",
+      "summary": "Confirmed the platform feature must support reward point migration in both directions: when a customer upgrades to a higher card variant and when a customer downgrades to a lower one.",
+      "status": "active",
+      "confidence": "high",
+      "tags": ["rewards", "card-upgrade", "card-downgrade", "scope"],
+      "sources": [],
+      "related_ids": ["decision-2026-08-10-generalized-platform-feature"],
       "owner": "discovery-interview",
       "created_at": "2026-08-10T00:00:00Z",
       "updated_at": "2026-08-10T00:00:00Z"
