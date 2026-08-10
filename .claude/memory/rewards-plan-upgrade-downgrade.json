@@ -92,6 +92,25 @@
       "updated_at": "2026-08-10T00:00:00Z"
     },
     {
+      "id": "assumption-2026-08-10-conversion-methods-exhaustive",
+      "type": "assumption",
+      "title": "The three anticipated conversion methods cover clients' real needs",
+      "summary": "The three conversion approaches described (fixed percentage, equal point count, equal point value) are anticipated by the user, not confirmed against actual client requirements. No client has yet validated that these are the only methods they need.",
+      "status": "draft",
+      "confidence": "low",
+      "data": {
+        "statement": "Clients' points-conversion requirements on card upgrade/downgrade will be fully covered by fixed-percentage, equal-point-count, and equal-point-value methods.",
+        "validation_status": "unvalidated",
+        "impact_if_wrong": "If real client requirements include a different conversion method (e.g. tiered/graduated ratios, minimum point guarantees, promotional overrides), the platform feature's configuration model may need rework before or during client onboarding."
+      },
+      "tags": ["rewards", "conversion-ratio", "multi-client"],
+      "sources": [],
+      "related_ids": ["insight-2026-08-10-client-defined-conversion-ratio"],
+      "owner": "discovery-interview",
+      "created_at": "2026-08-10T00:00:00Z",
+      "updated_at": "2026-08-10T00:00:00Z"
+    },
+    {
       "id": "insight-2026-08-10-bidirectional-scope",
       "type": "insight",
       "title": "Feature scope covers both upgrade and downgrade",
