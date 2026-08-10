@@ -50,6 +50,20 @@
       "updated_at": "2026-08-10T00:00:00Z"
     },
     {
+      "id": "insight-2026-08-10-roadmap-and-scaling-driver",
+      "type": "insight",
+      "title": "Initiative is on the platform roadmap; driven by Ops not scaling with upgrade/downgrade volume",
+      "summary": "This feature is a committed platform roadmap item. The stated driver is that Ops cannot keep up with the manual debit/credit process as the volume of card variant upgrades/downgrades grows with scale.",
+      "status": "active",
+      "confidence": "medium",
+      "tags": ["rewards", "roadmap", "ops-scaling"],
+      "sources": [],
+      "related_ids": ["insight-2026-08-10-manual-points-migration"],
+      "owner": "discovery-interview",
+      "created_at": "2026-08-10T00:00:00Z",
+      "updated_at": "2026-08-10T00:00:00Z"
+    },
+    {
       "id": "insight-2026-08-10-bidirectional-scope",
       "type": "insight",
       "title": "Feature scope covers both upgrade and downgrade",
