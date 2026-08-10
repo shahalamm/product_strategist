@@ -38,9 +38,7 @@
         ],
         "recommendation": "Build a platform feature that automates reward point migration for any credit card variant change, upgrade or downgrade, replacing the manual Ops process.",
         "rationale": "The user explicitly stated the goal is a platform feature that works for any credit card upgrade, and confirmed downgrade is in scope too — not a one-off fix for a single card pair or direction, to remove Ops from the manual debit/credit loop.",
-        "open_questions": [
-          "How is the points conversion ratio determined per card variant pair, and where does that data live today?"
-        ]
+        "open_questions": []
       },
       "tags": ["rewards", "card-upgrade", "card-downgrade", "scope"],
       "sources": [],
@@ -134,6 +132,20 @@
       "tags": ["rewards", "success-criteria"],
       "sources": [],
       "related_ids": ["insight-2026-08-10-client-defined-conversion-ratio"],
+      "owner": "discovery-interview",
+      "created_at": "2026-08-10T00:00:00Z",
+      "updated_at": "2026-08-10T00:00:00Z"
+    },
+    {
+      "id": "risk-2026-08-10-customer-dispute",
+      "type": "risk",
+      "title": "Customer disputes over migrated point amount",
+      "summary": "The primary risk identified is a customer disputing the number of reward points they receive after a card variant migration. Reward points carry real value to customers, so an incorrect or unclear migration amount is expected to surface as a dispute.",
+      "status": "active",
+      "confidence": "medium",
+      "tags": ["rewards", "risk", "customer-dispute"],
+      "sources": [],
+      "related_ids": ["insight-2026-08-10-success-criteria-reconciliation", "insight-2026-08-10-client-defined-conversion-ratio"],
       "owner": "discovery-interview",
       "created_at": "2026-08-10T00:00:00Z",
       "updated_at": "2026-08-10T00:00:00Z"
