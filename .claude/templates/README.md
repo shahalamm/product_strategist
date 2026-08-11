@@ -11,7 +11,7 @@ template exists, add one here rather than formatting inline in the skill.
 
 ## Status
 
-Two templates exist:
+Three templates exist:
 
 - `capability-matrix.md`, used by `research-agent`
   (`.claude/agents/research-agent.md`) to render a comparison of the
@@ -22,11 +22,20 @@ Two templates exist:
   memory store into a fixed 35-section document, with an explicit
   "Not available" line for every section the store can't support. See
   `.claude/examples/documentation-agent/` for a filled-in example.
+- `interactive-map.html`, used by `interactive-map-agent`
+  (`.claude/agents/interactive-map-agent.md`) to render competitor and
+  own-position scores as an interactive Chart.js scatter map — a
+  self-contained HTML file, not Markdown, since the artifact itself is
+  interactive. See `.claude/examples/interactive-map-agent/` for a
+  filled-in example, verified to actually run in a browser, not just
+  parse.
 
 ## Conventions
 
-- File names are `kebab-case.md`, named after the artifact they produce
-  (e.g. `competitor-teardown.md`, not `template3.md`).
+- File names are `kebab-case`, named after the artifact they produce
+  (e.g. `competitor-teardown.md`, not `template3.md`) — `.md` for prose
+  documents, `.html` for the rare case where the artifact itself needs to
+  be an interactive page rather than a document Markdown can express.
 - A template defines structure and placeholders, not example content —
   example filled-in content belongs in `.claude/examples/`.
 - A template should be renderable using data available from

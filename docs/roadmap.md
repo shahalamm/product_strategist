@@ -65,17 +65,29 @@ The platform is built one skill/agent at a time, narrow before wide, per
    assumption rather than hedging vaguely. `competitor` records stay
    scoped to external products; this is the only agent that positions
    "us."
+9. **`interactive-map-agent`** (agent) — renders every axis-pair with at
+   least two plottable entities (competitor scores and/or an
+   own-position) as an interactive Chart.js scatter map — one
+   self-contained HTML file, no build step, opens directly in a browser.
+   An entity missing one axis of a pair is simply absent from that map,
+   named explicitly in a "not plotted" note rather than forced on with a
+   guess. "Us" renders as a hollow marker whenever its position is
+   `status: "draft"`. Writes zero memory records — the second agent
+   (after `documentation-agent`) whose only output is a document. No
+   radar/spider view yet — that needs 3+ consistently-scored axes across
+   the same entities, which no project has produced.
 
 ## Still to come
 
-All eight pieces built so far are the original vision plus the
-perceptual-map extension (Tasks 11-12). The core discovery → research →
+Nine pieces are now built: the original seven-agent vision plus the
+perceptual-map extension (Tasks 11-13) — scoring, own-position, and now
+an actual rendering surface for both. The core discovery → research →
 strategy → solution-design → systems-impact → documentation loop is
-complete end to end for a single project, and competitors/own-position
-can now be plotted on the same axes — no rendering surface exists for
-that yet.
+complete end to end, and competitors/own-position can be plotted and
+explored interactively for any project with scored axis data.
 
-The next horizon is a parked UI track — a way to interact with this
-platform outside a Claude Code conversation, including rendering the
-perceptual map — noted here as a pointer to future work, not started or
-designed in this repository.
+Known gaps, not silently omitted: a radar/spider chart (needs 3+ shared
+axes, doesn't exist in any project's data yet), and the parked UI track —
+a way to interact with this platform outside a Claude Code conversation —
+noted here as a pointer to future work, not started or designed in this
+repository.

@@ -94,7 +94,7 @@ available."
 | 11 | Decision Log | Every `decision` record, in full — `alternatives_considered`/`recommendation`/`rationale` intact. This section should look almost identical to the raw records; the decision log *is* this section. |
 | 12 | Open Questions | Aggregated from `decision.data.open_questions` and `assumption`s with `validation_status` of `unvalidated`/`validating` |
 | 13 | Market Signals | `market-signal` records (schema type exists; no skill produces it yet) |
-| 14 | Competitive Landscape | `competitor` records, plus a pointer to an existing Capability Matrix in `.claude/outputs/` if one exists — reference it, don't regenerate it |
+| 14 | Competitive Landscape | `competitor` records, plus a pointer to an existing Capability Matrix in `.claude/outputs/` if one exists, and a pointer to an existing interactive perceptual map (`.claude/outputs/<project-slug>/interactive-map/interactive-map.html`) if one exists — reference both, don't regenerate either |
 | 15 | Research Insights & Sources | `research-source` records |
 | 16 | Opportunities | `opportunity` records (schema type exists; no skill produces it yet) |
 | 17 | Strategic Options Considered | `decision` records tagged `strategy-recommendation` — their full `alternatives_considered`, including rejected options |
