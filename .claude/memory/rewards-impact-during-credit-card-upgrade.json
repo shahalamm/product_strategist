@@ -1,0 +1,67 @@
+{
+  "version": "1.0.0",
+  "records": [
+    {
+      "id": "insight-2026-08-11-proactive-feature-origin",
+      "type": "insight",
+      "title": "Feature is proactive, not triggered by a specific incident",
+      "summary": "The rewards platform team is proactively building a feature to handle reward points seamlessly across credit card upgrades; no specific customer complaint or incident was cited as the trigger.",
+      "status": "active",
+      "confidence": "medium",
+      "tags": [
+        "rewards-platform",
+        "credit-card-upgrade",
+        "source-context"
+      ],
+      "sources": [],
+      "related_ids": [],
+      "owner": "discovery-interview",
+      "created_at": "2026-08-11T20:15:29Z",
+      "updated_at": "2026-08-11T20:15:29Z"
+    },
+    {
+      "id": "insight-2026-08-11-competitive-research-desired",
+      "type": "insight",
+      "title": "Competitive research on reward-point continuity is explicitly desired",
+      "summary": "The team explicitly wants to see how other platforms handle reward points during a credit card upgrade, to inform this feature.",
+      "status": "active",
+      "confidence": "medium",
+      "tags": [
+        "rewards-platform",
+        "credit-card-upgrade",
+        "competitive-research"
+      ],
+      "sources": [],
+      "related_ids": [
+        "insight-2026-08-11-proactive-feature-origin"
+      ],
+      "owner": "discovery-interview",
+      "created_at": "2026-08-11T20:15:29Z",
+      "updated_at": "2026-08-11T20:15:29Z"
+    },
+    {
+      "id": "assumption-2026-08-11-current-handling-not-seamless",
+      "type": "assumption",
+      "title": "Current reward-point handling during a card upgrade is assumed not seamless",
+      "summary": "The team's stated goal (\"handled seamlessly\") implies today's handling of reward points during a credit card upgrade is not seamless, but what specifically breaks or is manual has not yet been described.",
+      "status": "draft",
+      "confidence": "low",
+      "data": {
+        "statement": "Today, when a customer upgrades their credit card, their accrued reward points are not handled seamlessly — some unspecified friction, loss, delay, or manual process currently occurs.",
+        "validation_status": "unvalidated",
+        "impact_if_wrong": "If current handling is already adequate, effort could be misdirected toward a problem that doesn't concretely exist, or aimed at the wrong part of the experience."
+      },
+      "tags": [
+        "rewards-platform",
+        "credit-card-upgrade"
+      ],
+      "sources": [],
+      "related_ids": [
+        "insight-2026-08-11-proactive-feature-origin"
+      ],
+      "owner": "discovery-interview",
+      "created_at": "2026-08-11T20:15:29Z",
+      "updated_at": "2026-08-11T20:15:29Z"
+    }
+  ]
+}
