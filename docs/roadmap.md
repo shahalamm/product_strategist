@@ -21,7 +21,11 @@ The platform is built one skill/agent at a time, narrow before wide, per
    scope, writes `research-source`/`competitor` records, and renders a
    Capability Matrix comparing the project's own stance to what was
    found. Refuses to research a broad category if scope isn't established
-   yet.
+   yet. May optionally score competitors on 1-3 project-specific axes for
+   a future perceptual map, only when a score genuinely traces to
+   evidence already gathered — how the project's own stance gets
+   positioned on those axes remains an open question for whoever builds
+   the interactive rendering.
 4. **`strategy-agent`** (agent) — given an already-grounded open
    risk/assumption, generates 2-4 solution options with a structured
    impact assessment each, engages with any existing competitor research

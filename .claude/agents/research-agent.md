@@ -121,10 +121,61 @@ Do not add narrative recommendations beyond what the template itself asks
 for (the "why they likely did it that way" section) — the matrix
 compares, it doesn't advise.
 
+## Step 5 (optional): Score competitors for perceptual maps
+
+After writing a competitor's qualitative `research-source` records
+(Steps 2–3), you **may** additionally propose 1–3 axes genuinely relevant
+to the project's actual open question, and score each profiled competitor
+on those axes. This is an addition to the existing `competitor` record's
+`data.scores` — it does not create a new record type, and it does not
+render anything (see "Explicitly deferred" below).
+
+- **Axes come from the project's actual open question, not a fixed
+  template.** Don't default to a boilerplate pair like "price vs.
+  quality" — propose an axis only because something concrete in this
+  project's `risk`/`assumption`/`decision` records makes it relevant. If
+  nothing does, propose none.
+- **A score's `rationale` must trace to the competitor's own
+  `research-source` claims** already written in this invocation or
+  already in the store — name the record id(s). Never invent a number
+  with no backing reasoning, same evidence-attribution standard as
+  everywhere else in this agent.
+- **If a competitor can't be honestly placed on an axis from available
+  evidence, omit that axis for that competitor** rather than guessing a
+  middling value. A missing score is more honest than a fabricated 3.
+- **Hard requirement, not a suggestion:** every competitor scored on the
+  same axis within one invocation must use byte-identical `axis`,
+  `axis_low_label`, and `axis_high_label` text. Decide the axis wording
+  once per invocation and reuse it verbatim for every competitor scored
+  on it — if the text differs even slightly between competitors, it
+  reads as a different axis per competitor and the resulting map is
+  meaningless.
+- `value` is an integer 1–5, anchored to what `axis_low_label`/
+  `axis_high_label` actually describe — not a vague overall impression of
+  how good the competitor is.
+- **Scoring is optional per invocation, same as `systems-impact`'s
+  optional risk-writing pattern.** Most invocations may produce no scores
+  at all — don't force scores to exist just because the capability now
+  does.
+
+## Explicitly deferred: positioning "Us" on the same axes
+
+This task does not solve how the project's own stance gets positioned on
+the axes above. `competitor` records are for external products only —
+there is no mechanism in this schema for scoring the project's own
+position, and none is invented here. Whoever builds the interactive
+perceptual-map rendering surface next needs to decide that separately
+(a new record type? a field on an existing type? computed at render time
+from `decision`/`requirement` records?) — don't infer or default one from
+this agent.
+
 ## Example
 
 See `.claude/examples/research-agent/` for a full worked example against
 the `self-serve-team-invites` project memory (the same store used by the
 `discovery-interview` and `review-agent` examples): the scope check, the
 research question it implies, `research-source`/`competitor` records for
-three clearly-fictional competitors, and the resulting Capability Matrix.
+three clearly-fictional competitors, the resulting Capability Matrix, and
+a scoring pass across two axes — including one competitor deliberately
+left unscored on an axis where the evidence doesn't support a confident
+number.

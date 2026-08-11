@@ -118,6 +118,22 @@ plausible reason why, not just a feature listing.
     "evidence_ids": [
       "research-source-2026-08-25-teamflo-no-approval",
       "research-source-2026-08-25-teamflo-notification"
+    ],
+    "scores": [
+      {
+        "axis": "Approval Friction",
+        "axis_low_label": "No approval step required for any invite",
+        "axis_high_label": "Every invite requires explicit approval before it completes",
+        "value": 1,
+        "rationale": "research-source-2026-08-25-teamflo-no-approval: TeamFlo has no admin approval step for team invites at all — any member can add a teammate directly, placing it at the lowest-friction end of this axis."
+      },
+      {
+        "axis": "Budget Visibility Immediacy",
+        "axis_low_label": "No signal to the budget owner when a new seat is added",
+        "axis_high_label": "Budget owner is notified in real time when a new seat is added",
+        "value": 5,
+        "rationale": "research-source-2026-08-25-teamflo-notification: TeamFlo sends a real-time email/push notification to the billing admin whenever a new paid seat is added — this matches the high end of this axis directly."
+      }
     ]
   },
   "tags": ["self-serve-invites", "competitor-research"],
@@ -125,7 +141,7 @@ plausible reason why, not just a feature listing.
   "related_ids": ["insight-2026-08-18-support-escalation-origin", "decision-2026-08-20-restrict-invite-to-full-members"],
   "owner": "research-agent",
   "created_at": "2026-08-25T10:10:00Z",
-  "updated_at": "2026-08-25T10:10:00Z"
+  "updated_at": "2026-09-20T11:00:00Z"
 }
 ```
 
@@ -191,6 +207,22 @@ plausible reason why, not just a feature listing.
     "evidence_ids": [
       "research-source-2026-08-25-huddleworks-widened-approval",
       "research-source-2026-08-25-huddleworks-flat-billing"
+    ],
+    "scores": [
+      {
+        "axis": "Approval Friction",
+        "axis_low_label": "No approval step required for any invite",
+        "axis_high_label": "Every invite requires explicit approval before it completes",
+        "value": 5,
+        "rationale": "research-source-2026-08-25-huddleworks-widened-approval: Huddleworks still requires an approval step for every invite — only the pool of who can approve was widened from admins-only to any full member. Every invite still passes through approval, so this sits at the highest-friction end of this axis."
+      },
+      {
+        "axis": "Budget Visibility Immediacy",
+        "axis_low_label": "No signal to the budget owner when a new seat is added",
+        "axis_high_label": "Budget owner is notified in real time when a new seat is added",
+        "value": 1,
+        "rationale": "research-source-2026-08-25-huddleworks-flat-billing: Huddleworks bills a flat rate with no per-seat notification at all — there is no signal to the budget owner when a seat is added, matching the low end of this axis directly."
+      }
     ]
   },
   "tags": ["self-serve-invites", "competitor-research"],
@@ -198,7 +230,7 @@ plausible reason why, not just a feature listing.
   "related_ids": ["insight-2026-08-18-support-escalation-origin", "decision-2026-08-20-restrict-invite-to-full-members"],
   "owner": "research-agent",
   "created_at": "2026-08-25T10:25:00Z",
-  "updated_at": "2026-08-25T10:25:00Z"
+  "updated_at": "2026-09-20T11:00:00Z"
 }
 ```
 
@@ -264,6 +296,15 @@ plausible reason why, not just a feature listing.
     "evidence_ids": [
       "research-source-2026-08-26-rosterpilot-threshold-approval",
       "research-source-2026-08-26-rosterpilot-ambient-banner"
+    ],
+    "scores": [
+      {
+        "axis": "Budget Visibility Immediacy",
+        "axis_low_label": "No signal to the budget owner when a new seat is added",
+        "axis_high_label": "Budget owner is notified in real time when a new seat is added",
+        "value": 3,
+        "rationale": "research-source-2026-08-26-rosterpilot-ambient-banner: RosterPilot displays a persistent account-level banner showing current seat count and projected monthly cost, with no per-invite notification. That's a real, always-current signal (ruling out the lowest value), but it's pull-based — the budget owner has to look — rather than pushed in real time (ruling out the highest value), placing it at the midpoint of this axis."
+      }
     ]
   },
   "tags": ["self-serve-invites", "competitor-research"],
@@ -271,9 +312,19 @@ plausible reason why, not just a feature listing.
   "related_ids": ["insight-2026-08-18-support-escalation-origin", "decision-2026-08-20-restrict-invite-to-full-members"],
   "owner": "research-agent",
   "created_at": "2026-08-26T09:10:00Z",
-  "updated_at": "2026-08-26T09:10:00Z"
+  "updated_at": "2026-09-20T11:00:00Z"
 }
 ```
+
+**RosterPilot is deliberately left unscored on "Approval Friction."**
+`research-source-2026-08-26-rosterpilot-threshold-approval` says approval
+is required only above a soft seat-count threshold — but the evidence
+doesn't say where that threshold sits or how often accounts cross it, so
+neither end of the axis (nor any specific point between them) can be
+honestly justified. Guessing a middling value here would be exactly the
+fabrication this platform's evidence-attribution rule exists to prevent;
+omitting the axis for this competitor is the correct outcome, not a gap
+to fill later.
 
 Note what's absent: no `decision`, `assumption`, `risk`, or `insight`
 record is written here, even though the TeamFlo/Huddleworks findings
@@ -288,3 +339,53 @@ full rendered artifact — what `research-agent` would write to
 `.claude/outputs/self-serve-team-invites/capability-matrix/capability-matrix.md`,
 produced from `.claude/templates/capability-matrix.md` using only the
 records above (and the store from `input.md`).
+
+## Step 5: scoring pass (added in Task 11)
+
+A later invocation of `research-agent` against this same store proposed
+two axes, per Step 5 of `.claude/agents/research-agent.md`, and added
+`data.scores` to the three `competitor` records shown above (see their
+updated `updated_at` timestamps). Neither axis is a generic template
+default — both trace directly to open questions already in the store:
+
+- **Approval Friction** — ties to `assumption-2026-08-20-approval-rarely-blocks`
+  and the still-undecided question of whether admin approval is removed
+  at all (see `decision-2026-09-02-budget-owner-notification-mechanism`'s
+  own `open_questions`).
+- **Budget Visibility Immediacy** — ties directly to
+  `risk-2026-08-20-losing-budget-checkpoint` and
+  `assumption-2026-08-20-budget-owner-notification-preference`, the exact
+  question the whole notification-mechanism decision was about.
+
+**Consistency rule, demonstrated:** every competitor scored on
+"Approval Friction" uses the byte-identical `axis_low_label`
+("No approval step required for any invite") and `axis_high_label`
+("Every invite requires explicit approval before it completes") — TeamFlo
+and Huddleworks only, since RosterPilot is omitted on this axis (see
+below). Every competitor scored on "Budget Visibility Immediacy" — all
+three — uses the byte-identical `axis_low_label`
+("No signal to the budget owner when a new seat is added") and
+`axis_high_label` ("Budget owner is notified in real time when a new
+seat is added"). Neither axis's wording varies by even a word across the
+competitors scored on it.
+
+**Scores by axis:**
+
+| Competitor | Approval Friction | Budget Visibility Immediacy |
+|---|---|---|
+| TeamFlo | 1 | 5 |
+| Huddleworks | 5 | 1 |
+| RosterPilot | *omitted — see below* | 3 |
+
+RosterPilot's omission on Approval Friction is the deliberate case this
+example exists to show: the evidence
+(`research-source-2026-08-26-rosterpilot-threshold-approval`) describes a
+*conditional* policy (no approval below a threshold, required above it)
+with no data on where that threshold sits or how often it's crossed — so
+no single 1–5 value can be honestly justified, and none is written,
+rather than defaulting to a middling guess.
+
+Positioning "Us" on either of these axes is explicitly out of scope here
+— see `.claude/agents/research-agent.md`'s "Explicitly deferred" section.
+No such score is written for this project's own stance anywhere in this
+example.

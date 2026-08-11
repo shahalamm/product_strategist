@@ -99,6 +99,20 @@ level on purpose: `discovery-interview`'s existing decisions don't need
 it and haven't been retrofitted to include it. See
 `.claude/examples/strategy-agent/` for a fully-populated example.
 
+A `competitor` may also carry an optional `data.scores` array — perceptual-
+map axis scores (`axis`, `axis_low_label`, `axis_high_label`, `value` 1-5,
+`rationale`), added by `research-agent` only when it can genuinely justify
+a number from its own `research-source` evidence. Optional at the schema
+level for the same reason as `impact` above: a `competitor` record with no
+scores is still a complete, valid record. Every competitor scored on the
+same axis in one invocation must use identical `axis_low_label`/
+`axis_high_label` text, or the axis isn't really the same axis across
+them. How the project's own stance gets positioned on these axes is an
+open question, deliberately not solved by this addition — see
+`.claude/agents/research-agent.md`'s "Explicitly deferred" section. See
+`.claude/examples/research-agent/` for a fully-populated example,
+including a competitor deliberately left unscored on an axis.
+
 ## Example records
 
 Two fully-populated examples showing correct use of `data` for the two

@@ -189,6 +189,22 @@
                     "minItems": 1,
                     "items": { "type": "string" },
                     "description": "research-source record ids backing this profile. A competitor record with no evidence behind it should not exist."
+                  },
+                  "scores": {
+                    "type": "array",
+                    "description": "Optional perceptual-map axis scores for this competitor. A competitor record with no scores is still valid — scoring only happens when research-agent can genuinely justify a number, same as every other evidence-attribution rule in this platform.",
+                    "items": {
+                      "type": "object",
+                      "required": ["axis", "axis_low_label", "axis_high_label", "value", "rationale"],
+                      "properties": {
+                        "axis": { "type": "string", "minLength": 1 },
+                        "axis_low_label": { "type": "string", "minLength": 1 },
+                        "axis_high_label": { "type": "string", "minLength": 1 },
+                        "value": { "type": "integer", "minimum": 1, "maximum": 5 },
+                        "rationale": { "type": "string", "minLength": 1 }
+                      }
+                    },
+                    "default": []
                   }
                 }
               }
