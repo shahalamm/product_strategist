@@ -43,12 +43,12 @@
       "id": "assumption-2026-08-11-current-handling-not-seamless",
       "type": "assumption",
       "title": "Current reward-point handling during a card upgrade is assumed not seamless",
-      "summary": "The team's stated goal (\"handled seamlessly\") implies today's handling of reward points during a credit card upgrade is not seamless, but what specifically breaks or is manual has not yet been described.",
-      "status": "draft",
-      "confidence": "low",
+      "summary": "The team's stated goal (\"handled seamlessly\") implies today's handling of reward points during a credit card upgrade is not seamless. Now validated: the transfer is a manual operations process, not an automated one.",
+      "status": "active",
+      "confidence": "medium",
       "data": {
         "statement": "Today, when a customer upgrades their credit card, their accrued reward points are not handled seamlessly — some unspecified friction, loss, delay, or manual process currently occurs.",
-        "validation_status": "unvalidated",
+        "validation_status": "validated",
         "impact_if_wrong": "If current handling is already adequate, effort could be misdirected toward a problem that doesn't concretely exist, or aimed at the wrong part of the experience."
       },
       "tags": [
@@ -57,11 +57,51 @@
       ],
       "sources": [],
       "related_ids": [
-        "insight-2026-08-11-proactive-feature-origin"
+        "insight-2026-08-11-proactive-feature-origin",
+        "insight-2026-08-11-manual-ops-transfer"
       ],
       "owner": "discovery-interview",
       "created_at": "2026-08-11T20:15:29Z",
-      "updated_at": "2026-08-11T20:15:29Z"
+      "updated_at": "2026-08-11T20:19:53Z"
+    },
+    {
+      "id": "insight-2026-08-11-manual-ops-transfer",
+      "type": "insight",
+      "title": "Reward points are currently transferred manually by operations",
+      "summary": "When a customer upgrades their credit card today, an operations team manually transfers their accrued reward points — there is no automated handling in place.",
+      "status": "active",
+      "confidence": "high",
+      "tags": [
+        "rewards-platform",
+        "credit-card-upgrade",
+        "current-behavior"
+      ],
+      "sources": [],
+      "related_ids": [
+        "assumption-2026-08-11-current-handling-not-seamless"
+      ],
+      "owner": "discovery-interview",
+      "created_at": "2026-08-11T20:19:53Z",
+      "updated_at": "2026-08-11T20:19:53Z"
+    },
+    {
+      "id": "risk-2026-08-11-manual-transfer-does-not-scale",
+      "type": "risk",
+      "title": "Manual ops transfer is a scaling and error-risk bottleneck",
+      "summary": "Because reward-point transfers during a card upgrade are handled manually by operations today, the process is bottlenecked on that team's capacity and exposed to human error/delay, with no stated safeguard as upgrade volume grows.",
+      "status": "draft",
+      "confidence": "medium",
+      "tags": [
+        "rewards-platform",
+        "credit-card-upgrade"
+      ],
+      "sources": [],
+      "related_ids": [
+        "insight-2026-08-11-manual-ops-transfer"
+      ],
+      "owner": "discovery-interview",
+      "created_at": "2026-08-11T20:19:53Z",
+      "updated_at": "2026-08-11T20:19:53Z"
     }
   ]
 }
