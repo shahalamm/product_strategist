@@ -544,6 +544,105 @@
       "owner": "strategy-agent",
       "created_at": "2026-08-11T22:01:00Z",
       "updated_at": "2026-08-11T22:01:00Z"
+    },
+    {
+      "id": "requirement-2026-08-11-automated-balance-transfer-on-upgrade",
+      "type": "requirement",
+      "title": "System automatically transfers reward-point balance on upgrade completion",
+      "summary": "When a credit card upgrade completes, the customer's reward-point balance moves from the old card record to the new one automatically, with no manual operations step.",
+      "status": "active",
+      "confidence": "medium",
+      "data": {
+        "statement": "The system automatically transfers the full reward-points balance from a customer's prior card record to their new card record when a credit card upgrade completes, without any manual operations action.",
+        "acceptance_criteria": [
+          "When a credit card upgrade completes, the full reward-points balance from the prior card record is present on the new card record with no manual operations action taken.",
+          "The customer does not need to take any action beyond completing the upgrade itself for the balance to move.",
+          "The sum of the customer's reward points immediately before the transfer equals the sum immediately after — no points are lost or duplicated."
+        ],
+        "edge_cases": [
+          "This requirement covers the successful-transfer path only; failure/retry/idempotency behavior is a separate requirement — see requirement-2026-08-11-transfer-idempotency-and-retry-safety."
+        ],
+        "elaborates_decision_id": "decision-2026-08-11-automated-transfer-service-recommendation"
+      },
+      "details": "decision-2026-08-11-automated-transfer-service-recommendation's own open_questions flags that this recommendation assumes the current per-card balance data model supports moving a balance atomically between card records, and that this is not yet confirmed — if that assumption is invalidated, this requirement (and Option B generally) needs revisiting in favor of Option A's unified-ledger model. Two further open questions from that same decision are deliberately not addressed by this requirement, not silently resolved: whether upgrades ever cross reward-currency families (competitor-2026-08-11-american-express-membership-rewards and competitor-2026-08-11-citi-thankyou-rewards wall this off; this platform's own answer is still unknown), and whether redemption value should be tier-gated the way research-source-2026-08-11-chase-redemption-value-gated-by-tier describes Chase doing it. Both remain open.",
+      "tags": [
+        "rewards-platform",
+        "credit-card-upgrade",
+        "automation"
+      ],
+      "sources": [],
+      "related_ids": [
+        "decision-2026-08-11-automated-transfer-service-recommendation",
+        "insight-2026-08-11-manual-ops-transfer"
+      ],
+      "owner": "solution-design",
+      "created_at": "2026-08-11T20:34:24Z",
+      "updated_at": "2026-08-11T20:34:24Z"
+    },
+    {
+      "id": "requirement-2026-08-11-transfer-trigger-event",
+      "type": "requirement",
+      "title": "Transfer is triggered only once the new card is fully active",
+      "summary": "The automated transfer is triggered by a single, well-defined event: the new card record reaching active status — not an earlier step like upgrade-requested or approved-but-not-active.",
+      "status": "active",
+      "confidence": "medium",
+      "data": {
+        "statement": "The automated transfer service is triggered by exactly one event — the new card record's status becoming \"active\" — and not by any earlier upgrade-lifecycle event such as upgrade-requested or approved-but-not-yet-active.",
+        "acceptance_criteria": [
+          "No transfer attempt occurs before the new card record's status is \"active.\"",
+          "Exactly one triggering event is emitted per upgrade, at the point the new card record becomes active."
+        ],
+        "elaborates_decision_id": "decision-2026-08-11-automated-transfer-service-recommendation"
+      },
+      "details": "(solution-design's judgment, not evidence) Which exact point in the upgrade lifecycle should trigger the transfer was not specified by decision-2026-08-11-automated-transfer-service-recommendation. Triggering on \"active\" rather than an earlier event minimizes the chance of transferring points onto a new card record that later fails final provisioning. This is a small implementation choice, not a meaningfully-weighed alternative, so it's resolved here rather than as a new decision record.",
+      "tags": [
+        "rewards-platform",
+        "credit-card-upgrade",
+        "automation"
+      ],
+      "sources": [],
+      "related_ids": [
+        "decision-2026-08-11-automated-transfer-service-recommendation",
+        "requirement-2026-08-11-automated-balance-transfer-on-upgrade"
+      ],
+      "owner": "solution-design",
+      "created_at": "2026-08-11T20:34:24Z",
+      "updated_at": "2026-08-11T20:34:24Z"
+    },
+    {
+      "id": "requirement-2026-08-11-transfer-idempotency-and-retry-safety",
+      "type": "requirement",
+      "title": "Automated transfer is idempotent and safely retryable",
+      "summary": "The automated transfer service produces exactly one balance transfer per upgrade even if the triggering event is redelivered or a transfer is retried after a partial failure.",
+      "status": "active",
+      "confidence": "medium",
+      "data": {
+        "statement": "The automated transfer service is idempotent and safely retryable: if the upgrade-completion event is delivered more than once, or a transfer is retried after a partial failure, the customer's final reward-point balance reflects exactly one transfer — never zero, and never duplicated.",
+        "acceptance_criteria": [
+          "Redelivering the same upgrade-completion event twice results in exactly one balance transfer, not two.",
+          "If the transfer service errors or crashes mid-transfer, retrying from the last known state does not double-credit or double-debit either card record.",
+          "A transfer that fails partway leaves the system in a state where the inconsistency is detectable, not silent."
+        ],
+        "edge_cases": [
+          "risk-2026-08-11-automated-transfer-failure-modes: this requirement exists specifically because that risk identified that replacing manual ops with automation trades an ops-capacity bottleneck for retry/idempotency/partial-transfer risk. This requirement addresses the idempotency and retry-safety part of that risk; it does not cover operational monitoring or alerting for stuck/failed transfers, which remains unaddressed and is a candidate for a future systems-impact assessment, not something resolved here."
+        ],
+        "elaborates_decision_id": "decision-2026-08-11-automated-transfer-service-recommendation"
+      },
+      "tags": [
+        "rewards-platform",
+        "credit-card-upgrade",
+        "automation",
+        "reliability"
+      ],
+      "sources": [],
+      "related_ids": [
+        "decision-2026-08-11-automated-transfer-service-recommendation",
+        "risk-2026-08-11-automated-transfer-failure-modes",
+        "requirement-2026-08-11-automated-balance-transfer-on-upgrade"
+      ],
+      "owner": "solution-design",
+      "created_at": "2026-08-11T20:34:24Z",
+      "updated_at": "2026-08-11T20:34:24Z"
     }
   ]
 }
