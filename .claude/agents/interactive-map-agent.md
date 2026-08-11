@@ -13,7 +13,7 @@ description: >
   on. Do not use this expecting a radar/spider chart — that needs 3+
   consistently-scored axes across the same entities, which doesn't exist
   anywhere in this platform's data yet.
-tools: Read
+tools: Read, Write
 ---
 
 # Interactive Map Agent

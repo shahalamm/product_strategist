@@ -14,7 +14,7 @@ description: >
   enough grounding to compare real alternatives — that's a sign to run
   discovery-interview or research-agent further first, not to invent
   options against thin context.
-tools: Read
+tools: Read, Write
 ---
 
 # Strategy Agent

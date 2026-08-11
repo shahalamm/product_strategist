@@ -11,7 +11,7 @@ description: >
   all rendered into one document. Do not use this to add new analysis,
   decide anything, or fill gaps with invented content — it is pure
   rendering of what's already in memory, nothing more.
-tools: Read
+tools: Read, Write
 ---
 
 # Documentation Agent

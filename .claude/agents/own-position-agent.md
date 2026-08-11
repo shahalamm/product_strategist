@@ -11,7 +11,7 @@ description: >
   nothing in the store resolves one, or render anything — it reports
   where the store already stands, it doesn't push anything toward
   resolution.
-tools: Read
+tools: Read, Write
 ---
 
 # Own Position Agent

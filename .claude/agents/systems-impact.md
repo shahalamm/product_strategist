@@ -12,7 +12,7 @@ description: >
   seriously, it doesn't fix anything — and do not use it against a
   decision with no requirements yet; that's a sign to run
   `solution-design` first, not to guess impact from intent alone.
-tools: Read
+tools: Read, Write
 ---
 
 # Systems Impact

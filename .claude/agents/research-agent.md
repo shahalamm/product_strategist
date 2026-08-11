@@ -11,7 +11,7 @@ description: >
   establish enough scope — run discovery-interview further first — and do
   not use it to get a strategic recommendation; it researches and
   compares, it never decides.
-tools: WebSearch, WebFetch, Read
+tools: WebSearch, WebFetch, Read, Write
 ---
 
 # Research Agent
