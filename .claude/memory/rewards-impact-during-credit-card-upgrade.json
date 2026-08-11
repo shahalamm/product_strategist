@@ -102,6 +102,324 @@
       "owner": "discovery-interview",
       "created_at": "2026-08-11T20:19:53Z",
       "updated_at": "2026-08-11T20:19:53Z"
+    },
+    {
+      "id": "research-source-2026-08-11-chase-points-carry-over-product-change",
+      "type": "research-source",
+      "title": "Chase: Ultimate Rewards balance carries over automatically on product change",
+      "summary": "Chase carries a cardmember's Ultimate Rewards points balance over automatically when they product-change to another Ultimate Rewards-earning card, with no manual transfer step.",
+      "status": "active",
+      "confidence": "high",
+      "data": {
+        "claim": "When a Chase cardmember does a product change (upgrade or downgrade) to another Ultimate Rewards-earning card, their existing Ultimate Rewards points balance carries over automatically, with no manual transfer step and no loss of the underlying point balance.",
+        "retrieved_at": "2026-08-11"
+      },
+      "details": "Chase can likely guarantee automatic, no-manual-step continuity here because Ultimate Rewards points are a single shared currency/ledger across all Ultimate-Rewards-earning Chase cards rather than a per-product balance — a product change re-labels which card is attached to the account without touching the underlying points ledger, so there is nothing for an ops team to reconcile.",
+      "tags": [
+        "rewards-platform",
+        "credit-card-upgrade",
+        "chase",
+        "automation"
+      ],
+      "sources": [
+        {
+          "label": "Chase - Credit Card Product Changes: A Quick Guide",
+          "reference": "https://www.chase.com/personal/credit-cards/education/basics/switching-credit-card-products"
+        },
+        {
+          "label": "CreditCards.com - How to upgrade a Chase credit card",
+          "reference": "https://www.creditcards.com/card-advice/upgrade-chase-card/"
+        }
+      ],
+      "related_ids": [
+        "insight-2026-08-11-manual-ops-transfer",
+        "risk-2026-08-11-manual-transfer-does-not-scale",
+        "insight-2026-08-11-competitive-research-desired"
+      ],
+      "owner": "research-agent",
+      "created_at": "2026-08-11T21:00:00Z",
+      "updated_at": "2026-08-11T21:00:00Z"
+    },
+    {
+      "id": "research-source-2026-08-11-chase-redemption-value-gated-by-tier",
+      "type": "research-source",
+      "title": "Chase: redemption value is gated by current card tier, not the point balance itself",
+      "summary": "After downgrading off a premium Chase card, the point balance is preserved but access to transfer partners and boosted portal redemption rates is lost.",
+      "status": "active",
+      "confidence": "high",
+      "data": {
+        "claim": "After a Chase product change/downgrade off a premium card (e.g., Sapphire Preferred) onto a card marketed as cash back (e.g., Freedom), the cardmember keeps their Ultimate Rewards point balance but loses access to transfer partners and the boosted travel-portal redemption rate that the premium card provided.",
+        "retrieved_at": "2026-08-11"
+      },
+      "details": "Chase funds transfer-partner relationships and the elevated portal redemption rate through the annual fee on its premium cards, so it gates those specific redemption options to whichever card a customer currently holds rather than to the points themselves — this protects the fee-supported revenue model while still letting the point balance itself move freely, since the balance and its redemption value are tracked separately.",
+      "tags": [
+        "rewards-platform",
+        "credit-card-upgrade",
+        "chase",
+        "redemption-value"
+      ],
+      "sources": [
+        {
+          "label": "CreditCards.com - How to upgrade a Chase credit card",
+          "reference": "https://www.creditcards.com/card-advice/upgrade-chase-card/"
+        },
+        {
+          "label": "FinanceBuzz - Chase Sapphire Cards downgrade guide",
+          "reference": "https://financebuzz.com/downgrade-chase-sapphire-preferred"
+        }
+      ],
+      "related_ids": [
+        "insight-2026-08-11-manual-ops-transfer",
+        "insight-2026-08-11-competitive-research-desired"
+      ],
+      "owner": "research-agent",
+      "created_at": "2026-08-11T21:01:00Z",
+      "updated_at": "2026-08-11T21:01:00Z"
+    },
+    {
+      "id": "research-source-2026-08-11-amex-upgrade-restricted-to-same-reward-family",
+      "type": "research-source",
+      "title": "Amex: upgrades restricted to staying within the same reward-currency family",
+      "summary": "American Express does not allow a card upgrade/downgrade to cross between cash back and Membership Rewards currencies.",
+      "status": "active",
+      "confidence": "high",
+      "data": {
+        "claim": "American Express only permits card upgrades/downgrades within the same card 'family' — a cardmember holding a cash back-earning card (e.g., Blue Cash Everyday) cannot product-change into a Membership Rewards-earning card (e.g., Amex Gold), or vice versa.",
+        "retrieved_at": "2026-08-11"
+      },
+      "details": "Cash back on Amex cards is a direct monetary rebate/statement-credit liability tracked in dollars, while Membership Rewards points are a separate proprietary loyalty currency with its own transfer-partner and breakage economics. Allowing a customer to cross from one to the other would force Amex to define and defend a conversion rate between two differently-modeled liabilities, so Amex avoids that accounting and financial-exposure complexity by hard-walling upgrades to stay within one reward-currency family.",
+      "tags": [
+        "rewards-platform",
+        "credit-card-upgrade",
+        "american-express",
+        "cross-currency"
+      ],
+      "sources": [
+        {
+          "label": "CreditCards.com - How to upgrade an American Express card",
+          "reference": "https://www.creditcards.com/card-advice/upgrade-american-express-card/"
+        },
+        {
+          "label": "Points Navigator - Amex Family Rule",
+          "reference": "https://pointsnav.com/credit-cards/rules/amex-family"
+        }
+      ],
+      "related_ids": [
+        "insight-2026-08-11-manual-ops-transfer",
+        "risk-2026-08-11-manual-transfer-does-not-scale",
+        "insight-2026-08-11-competitive-research-desired"
+      ],
+      "owner": "research-agent",
+      "created_at": "2026-08-11T21:02:00Z",
+      "updated_at": "2026-08-11T21:02:00Z"
+    },
+    {
+      "id": "research-source-2026-08-11-citi-restricts-aadvantage-thankyou-product-change",
+      "type": "research-source",
+      "title": "Citi: product changes reportedly blocked between AAdvantage and ThankYou card families",
+      "summary": "Citi has, per multiple third-party reports, restricted product changes between its AAdvantage-branded (airline miles) cards and its ThankYou Points-branded cards.",
+      "status": "active",
+      "confidence": "medium",
+      "data": {
+        "claim": "Citi has restricted product changes so that a cardmember cannot move directly between an AAdvantage-branded (airline miles) card and a ThankYou Points-branded card in either direction — the two reward currencies are treated as separate product families for product-change purposes.",
+        "retrieved_at": "2026-08-11"
+      },
+      "details": "AAdvantage miles earned on Citi's co-branded cards are issued under a partnership agreement with American Airlines rather than being Citi's own currency, while ThankYou Points are Citi's proprietary currency. Letting a customer product-change across that boundary would require Citi to either buy back miles already committed to the airline partnership or invent a conversion rate between two currencies with very different unit costs, so Citi keeps the two families walled off from each other. Confidence is medium rather than high because third-party reporting on this rule has been inconsistent over time, with some reports describing Citi loosening the restriction again after tightening it.",
+      "tags": [
+        "rewards-platform",
+        "credit-card-upgrade",
+        "citi",
+        "cross-currency"
+      ],
+      "sources": [
+        {
+          "label": "AwardWallet - Citi Product Change Rules",
+          "reference": "https://awardwallet.com/credit-cards/citi-product-change-rules/"
+        },
+        {
+          "label": "Doctor Of Credit - Citi no longer allowing product changes between AAdvantage & ThankYou",
+          "reference": "https://www.doctorofcredit.com/reports-citi-no-longer-allowing-product-changes-between-aadvantage-thankyou/"
+        }
+      ],
+      "related_ids": [
+        "insight-2026-08-11-manual-ops-transfer",
+        "insight-2026-08-11-competitive-research-desired"
+      ],
+      "owner": "research-agent",
+      "created_at": "2026-08-11T21:03:00Z",
+      "updated_at": "2026-08-11T21:03:00Z"
+    },
+    {
+      "id": "research-source-2026-08-11-capital-one-one-way-cash-to-miles-conversion",
+      "type": "research-source",
+      "title": "Capital One: self-service, one-directional cash-back-to-miles conversion",
+      "summary": "Capital One lets cardmembers self-convert cash back into miles at a fixed rate, one direction only, rather than automatically as part of a product change.",
+      "status": "active",
+      "confidence": "high",
+      "data": {
+        "claim": "Capital One lets a cardmember move earned cash back into Capital One miles via a self-service 'Combine Rewards' action at a fixed rate of 1 cent of cash back per mile, but the conversion only runs in that one direction — miles cannot be converted back into cash back at that same rate — and it requires the cardmember to hold both a cash back card and a miles-eligible card (e.g., Venture or Venture X) rather than happening as an automatic side-effect of a product change.",
+        "retrieved_at": "2026-08-11"
+      },
+      "details": "Making the cross-currency conversion self-service, one-directional, and fixed-rate lets Capital One offer more cross-currency flexibility than Amex or Citi allow, without opening a two-way arbitrage loophole or requiring an ops team to manually reconcile balances on every card change — the conservative fixed rate protects Capital One from customers gaming the direction of conversion for value.",
+      "tags": [
+        "rewards-platform",
+        "credit-card-upgrade",
+        "capital-one",
+        "cross-currency",
+        "automation"
+      ],
+      "sources": [
+        {
+          "label": "AwardWallet - Convert Capital One Cash Back to Transferrable Miles",
+          "reference": "https://awardwallet.com/credit-cards/capital-one-rewards/convert-cash-back-to-miles/"
+        },
+        {
+          "label": "Capital One - What Is a Credit Card Product Change?",
+          "reference": "https://www.capitalone.com/learn-grow/money-management/credit-card-product-change/"
+        }
+      ],
+      "related_ids": [
+        "insight-2026-08-11-manual-ops-transfer",
+        "risk-2026-08-11-manual-transfer-does-not-scale",
+        "insight-2026-08-11-competitive-research-desired"
+      ],
+      "owner": "research-agent",
+      "created_at": "2026-08-11T21:04:00Z",
+      "updated_at": "2026-08-11T21:04:00Z"
+    },
+    {
+      "id": "competitor-2026-08-11-chase-ultimate-rewards",
+      "type": "competitor",
+      "title": "Chase Ultimate Rewards",
+      "summary": "Chase's shared points program that carries a cardmember's balance automatically across Ultimate Rewards-earning cards, while gating redemption value by current card tier.",
+      "status": "active",
+      "confidence": "high",
+      "data": {
+        "product_name": "Chase Ultimate Rewards",
+        "positioning": "Chase presents Ultimate Rewards as one shared, flexible points program that stays with the cardmember across their Chase cards, rather than a balance tied to any single card product.",
+        "evidence_ids": [
+          "research-source-2026-08-11-chase-points-carry-over-product-change",
+          "research-source-2026-08-11-chase-redemption-value-gated-by-tier"
+        ],
+        "scores": [
+          {
+            "axis": "Manual operations involvement in reward continuity during upgrade",
+            "axis_low_label": "Fully manual / ops-mediated",
+            "axis_high_label": "Fully automated, no manual step",
+            "value": 5,
+            "rationale": "research-source-2026-08-11-chase-points-carry-over-product-change describes the points balance carrying over automatically on product change with no manual transfer step described in issuer or third-party guidance."
+          }
+        ]
+      },
+      "tags": [
+        "rewards-platform",
+        "credit-card-upgrade",
+        "chase"
+      ],
+      "sources": [],
+      "related_ids": [
+        "insight-2026-08-11-manual-ops-transfer",
+        "risk-2026-08-11-manual-transfer-does-not-scale",
+        "insight-2026-08-11-competitive-research-desired"
+      ],
+      "owner": "research-agent",
+      "created_at": "2026-08-11T21:05:00Z",
+      "updated_at": "2026-08-11T21:05:00Z"
+    },
+    {
+      "id": "competitor-2026-08-11-american-express-membership-rewards",
+      "type": "competitor",
+      "title": "American Express Membership Rewards",
+      "summary": "Amex's rewards currency, kept walled off from its cash-back cards at the product-change level.",
+      "status": "active",
+      "confidence": "high",
+      "data": {
+        "product_name": "American Express Membership Rewards",
+        "positioning": "Amex frames upgrades and downgrades as moves within the same card 'family,' keeping a cardmember's existing rewards currency and benefits path intact rather than offering a path across cash back and Membership Rewards.",
+        "evidence_ids": [
+          "research-source-2026-08-11-amex-upgrade-restricted-to-same-reward-family"
+        ]
+      },
+      "tags": [
+        "rewards-platform",
+        "credit-card-upgrade",
+        "american-express"
+      ],
+      "sources": [],
+      "related_ids": [
+        "insight-2026-08-11-manual-ops-transfer",
+        "risk-2026-08-11-manual-transfer-does-not-scale",
+        "insight-2026-08-11-competitive-research-desired"
+      ],
+      "owner": "research-agent",
+      "created_at": "2026-08-11T21:06:00Z",
+      "updated_at": "2026-08-11T21:06:00Z"
+    },
+    {
+      "id": "competitor-2026-08-11-citi-thankyou-rewards",
+      "type": "competitor",
+      "title": "Citi ThankYou Rewards / AAdvantage cards",
+      "summary": "Citi's two separate reward currencies (ThankYou Points and AAdvantage miles), kept apart at the product-change level per third-party reporting.",
+      "status": "active",
+      "confidence": "medium",
+      "data": {
+        "product_name": "Citi ThankYou Rewards / AAdvantage cards",
+        "positioning": "Citi treats AAdvantage-branded cards and ThankYou Points-branded cards as two separate reward programs that a cardmember must choose between at application, not a single upgrade ladder a customer can move across.",
+        "evidence_ids": [
+          "research-source-2026-08-11-citi-restricts-aadvantage-thankyou-product-change"
+        ]
+      },
+      "tags": [
+        "rewards-platform",
+        "credit-card-upgrade",
+        "citi"
+      ],
+      "sources": [],
+      "related_ids": [
+        "insight-2026-08-11-manual-ops-transfer",
+        "insight-2026-08-11-competitive-research-desired"
+      ],
+      "owner": "research-agent",
+      "created_at": "2026-08-11T21:07:00Z",
+      "updated_at": "2026-08-11T21:07:00Z"
+    },
+    {
+      "id": "competitor-2026-08-11-capital-one-rewards",
+      "type": "competitor",
+      "title": "Capital One Rewards (cash back & miles)",
+      "summary": "Capital One's self-service, one-directional bridge between its cash-back and miles currencies.",
+      "status": "active",
+      "confidence": "high",
+      "data": {
+        "product_name": "Capital One Rewards (cash back & miles)",
+        "positioning": "Capital One frames 'Combine Rewards' as something the cardmember initiates themselves to move cash back into miles, rather than a conversion the issuer performs automatically for them.",
+        "evidence_ids": [
+          "research-source-2026-08-11-capital-one-one-way-cash-to-miles-conversion"
+        ],
+        "scores": [
+          {
+            "axis": "Manual operations involvement in reward continuity during upgrade",
+            "axis_low_label": "Fully manual / ops-mediated",
+            "axis_high_label": "Fully automated, no manual step",
+            "value": 4,
+            "rationale": "research-source-2026-08-11-capital-one-one-way-cash-to-miles-conversion describes a self-service, customer-initiated conversion with no manual ops step, but it requires the cardmember to hold both a cash back and a miles card and take explicit action, rather than the balance carrying over automatically by default the way Chase's does — placed one point below Chase's fully-automatic default carryover."
+          }
+        ]
+      },
+      "tags": [
+        "rewards-platform",
+        "credit-card-upgrade",
+        "capital-one"
+      ],
+      "sources": [],
+      "related_ids": [
+        "insight-2026-08-11-manual-ops-transfer",
+        "risk-2026-08-11-manual-transfer-does-not-scale",
+        "insight-2026-08-11-competitive-research-desired"
+      ],
+      "owner": "research-agent",
+      "created_at": "2026-08-11T21:08:00Z",
+      "updated_at": "2026-08-11T21:08:00Z"
     }
   ]
 }
