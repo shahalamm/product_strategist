@@ -420,6 +420,130 @@
       "owner": "research-agent",
       "created_at": "2026-08-11T21:08:00Z",
       "updated_at": "2026-08-11T21:08:00Z"
+    },
+    {
+      "id": "decision-2026-08-11-automated-transfer-service-recommendation",
+      "type": "decision",
+      "title": "Strategy recommendation: replace the manual ops transfer with an automated, event-driven transfer service",
+      "summary": "Evaluated three ways to resolve the manual-ops scaling bottleneck (risk-2026-08-11-manual-transfer-does-not-scale) in light of competitor research; recommends building a system-initiated automated transfer service that replaces the manual step while retaining today's per-card balance model, rather than a full unified-ledger redesign or a customer self-service flow.",
+      "status": "active",
+      "confidence": "medium",
+      "data": {
+        "alternatives_considered": [
+          {
+            "option": "Option A — Unify reward points into a single customer-level ledger, decoupled from card product (Chase Ultimate Rewards model). Restructure the balance data model so points belong to the customer, not to any specific card product; an upgrade re-associates which card is linked to the same ledger, so no balance ever moves and there is no transfer step for anyone (ops or automation) to perform.",
+            "pros": [
+              "Fully eliminates the manual transfer step itself (per insight-2026-08-11-manual-ops-transfer) rather than automating around it — follows Chase's fully automatic, no-manual-step model directly (competitor-2026-08-11-chase-ultimate-rewards, research-source-2026-08-11-chase-points-carry-over-product-change).",
+              "(strategy-agent's judgment, not evidence) Zero marginal operational cost per upgrade going forward — the strongest possible resolution of risk-2026-08-11-manual-transfer-does-not-scale, since there is no per-upgrade operation left to scale at all."
+            ],
+            "cons": [
+              "(strategy-agent's judgment, not evidence) Highest engineering cost of the three options and a one-time, high-risk balance-migration project, since it requires restructuring the existing per-card balance model implied by insight-2026-08-11-manual-ops-transfer.",
+              "Redemption-value gating by card tier would need to be rebuilt as a mechanism separate from the balance itself, the way Chase has had to (research-source-2026-08-11-chase-redemption-value-gated-by-tier)."
+            ],
+            "rejected_because": "(strategy-agent's judgment, not evidence) The scope and cost of a full ledger-model migration is disproportionate to directly resolving risk-2026-08-11-manual-transfer-does-not-scale when Option B resolves the same ops-scaling risk at materially lower engineering cost. Worth revisiting later as a long-term target state — see open_questions.",
+            "impact": {
+              "customer_impact": "No friction at all during upgrade — reward balance is simply visible under the new card immediately, matching the seamlessness goal named in assumption-2026-08-11-current-handling-not-seamless. Customers would still see redemption options change based on card tier, per research-source-2026-08-11-chase-redemption-value-gated-by-tier, which would need clear communication to avoid a support spike ((strategy-agent's judgment, not evidence)).",
+              "business_impact": "(strategy-agent's judgment, not evidence) Removes the ops bottleneck named in risk-2026-08-11-manual-transfer-does-not-scale entirely rather than mitigating it, so ops cost per upgrade drops to zero; carries the largest upfront engineering investment of the three options.",
+              "engineering_complexity": "high",
+              "operational_complexity": "low",
+              "scalability_risk": "(strategy-agent's judgment, not evidence) Lowest long-term scalability risk of the three options, because there is no per-upgrade operation of any kind — automated or manual — left to scale; volume growth has zero incremental transfer cost.",
+              "long_term_maintainability": "(strategy-agent's judgment, not evidence) Removes an entire class of transfer logic and edge cases from the codebase going forward, but the upfront migration of existing per-card balances into a unified ledger is a one-time high-risk data migration project not required by the other two options."
+            }
+          },
+          {
+            "option": "Option B — Event-driven automated transfer service (system replaces ops, per-card balances retained). Keep today's per-card balance model (per insight-2026-08-11-manual-ops-transfer) but replace the human ops step with an automated service, triggered by the upgrade-completion event, that moves the balance from the old card record to the new one algorithmically.",
+            "pros": [
+              "Directly removes ops from the transfer path named in risk-2026-08-11-manual-transfer-does-not-scale, matching the no-manual-step customer outcome Chase achieves (research-source-2026-08-11-chase-points-carry-over-product-change) without requiring the balance-model migration Option A does.",
+              "(strategy-agent's judgment, not evidence) Lower engineering cost and smaller blast radius than Option A, since it automates the existing transfer concept rather than replacing the underlying data model."
+            ],
+            "cons": [
+              "(strategy-agent's judgment, not evidence) Retains a per-upgrade transfer operation — now automated rather than manual — as a potential point of failure under concurrency or retries; see the new risk record linked to this decision.",
+              "Does not remove the transfer concept from the codebase long-term the way Option A would, so it is a partial rather than complete resolution of the underlying architecture question."
+            ],
+            "impact": {
+              "customer_impact": "Matches Chase's no-manual-step, no-customer-action outcome (research-source-2026-08-11-chase-points-carry-over-product-change) from the customer's point of view — the balance appears on the new card without the customer taking any action, unlike Capital One's self-service model (research-source-2026-08-11-capital-one-one-way-cash-to-miles-conversion), which requires an explicit customer action.",
+              "business_impact": "(strategy-agent's judgment, not evidence) Directly removes ops from the critical path named in risk-2026-08-11-manual-transfer-does-not-scale at a lower upfront cost than Option A, since it automates the existing transfer step instead of eliminating the concept of a transfer.",
+              "engineering_complexity": "medium",
+              "operational_complexity": "low",
+              "scalability_risk": "(strategy-agent's judgment, not evidence) Scales far better than today's manual process, since throughput is no longer bounded by ops headcount (risk-2026-08-11-manual-transfer-does-not-scale), but retains a per-upgrade transfer operation (now automated) as a potential failure point under high volume or concurrency, unlike Option A which removes the operation entirely.",
+              "long_term_maintainability": "(strategy-agent's judgment, not evidence) Keeps today's per-card balance model, so it's a smaller, more isolated change to maintain than Option A's ledger migration, but the platform will carry transfer/reconciliation logic indefinitely rather than eliminating that class of code."
+            }
+          },
+          {
+            "option": "Option C — Self-service, customer-initiated transfer step (Capital One 'Combine Rewards' model). Build a customer-facing flow where, at or after upgrade, the customer is prompted to confirm and trigger the points transfer themselves (with a stated fixed rate if crossing reward-currency families), mirroring Capital One's self-service, one-directional conversion.",
+            "pros": [
+              "Lowest engineering cost of the three, closely mirroring Capital One's existing self-service 'Combine Rewards' pattern (competitor-2026-08-11-capital-one-rewards, research-source-2026-08-11-capital-one-one-way-cash-to-miles-conversion) rather than requiring new balance architecture.",
+              "Removes ops from the default path named in risk-2026-08-11-manual-transfer-does-not-scale by shifting the action to the customer instead of the system."
+            ],
+            "cons": [
+              "(strategy-agent's judgment, not evidence) Adds a manual action for the customer, unlike Chase's fully automatic default (research-source-2026-08-11-chase-points-carry-over-product-change) or Option B above; this runs counter to the seamlessness goal implied by assumption-2026-08-11-current-handling-not-seamless, and risks points sitting un-transferred if customers don't complete the step, echoing how Capital One's conversion only happens when the customer explicitly acts (research-source-2026-08-11-capital-one-one-way-cash-to-miles-conversion).",
+              "(strategy-agent's judgment, not evidence) If customers don't complete the self-service step, it risks re-creating an ops escalation path, only partially resolving risk-2026-08-11-manual-transfer-does-not-scale rather than removing it from the default path."
+            ],
+            "rejected_because": "(strategy-agent's judgment, not evidence) Shifting the transfer action onto the customer runs counter to the seamlessness goal underlying assumption-2026-08-11-current-handling-not-seamless and risks reintroducing an ops escalation path for incomplete transfers, undermining the direct resolution of risk-2026-08-11-manual-transfer-does-not-scale that Option B achieves without that dependency.",
+            "impact": {
+              "customer_impact": "(strategy-agent's judgment, not evidence) Adds a manual action for the customer during or after upgrade; runs counter to the seamlessness goal implied by assumption-2026-08-11-current-handling-not-seamless, since the customer must notice and complete a step rather than the balance simply carrying over.",
+              "business_impact": "(strategy-agent's judgment, not evidence) Removes ops from the default path named in risk-2026-08-11-manual-transfer-does-not-scale at the lowest engineering cost of the three options, but shifts risk from an ops bottleneck to a customer-drop-off/support-ticket risk if customers don't understand or complete the step.",
+              "engineering_complexity": "low",
+              "operational_complexity": "medium",
+              "scalability_risk": "(strategy-agent's judgment, not evidence) Scales well on the engineering side since it's a self-service flow, but does not fully resolve the underlying scaling risk in risk-2026-08-11-manual-transfer-does-not-scale if a meaningful share of customers abandon or mishandle the self-service step and it lands back with ops as an escalation, unlike Options A and B which remove ops from the default path entirely.",
+              "long_term_maintainability": "(strategy-agent's judgment, not evidence) Smallest change of the three, but couples the reward-continuity experience to a customer action rather than to a stable backend guarantee, which may need revisiting if adoption/completion rates are poor."
+            }
+          }
+        ],
+        "recommendation": "Option B — build an event-driven, system-initiated automated transfer service that replaces the manual ops step while retaining today's per-card balance data model.",
+        "rationale": "This recommendation directly addresses risk-2026-08-11-manual-transfer-does-not-scale — the manual ops transfer described in insight-2026-08-11-manual-ops-transfer is the named bottleneck, and Option B removes ops from that path entirely by replacing the manual step with an automated, event-driven service, resolving the risk at materially lower engineering cost than Option A's full ledger-model unification while avoiding the customer-completion risk Option C would introduce (see Option C's rejected_because). Removing the manual step, rather than shifting it to the customer, also better serves the seamlessness goal implied by assumption-2026-08-11-current-handling-not-seamless. Unlike Amex and Citi, whose approach to reward continuity (competitor-2026-08-11-american-express-membership-rewards, competitor-2026-08-11-citi-thankyou-rewards) is to restrict which upgrades are even allowed so continuity is trivial by construction, none of the three options considered here restrict upgrade paths: insight-2026-08-11-manual-ops-transfer describes manual transfer as today's universal handling for upgrades generally, not something contingent on crossing a reward-currency boundary, so a restriction-based approach wouldn't by itself resolve risk-2026-08-11-manual-transfer-does-not-scale — it was considered and set aside as a possible fourth option for that reason rather than engineered into any of the three above. This recommendation rests on an unvalidated assumption: that this platform's per-card balance data model (as it exists today per insight-2026-08-11-manual-ops-transfer) can be automated in place without first needing the kind of redesign Option A represents. If that turns out not to be true — e.g., if the current data model doesn't cleanly support an atomic move between card records — Option A may need to be revisited as the real minimum viable path rather than a longer-term one.",
+        "open_questions": [
+          "Does this platform's card upgrades ever cross reward-currency families (e.g., cash-back to points, analogous to what Amex and Citi wall off per competitor-2026-08-11-american-express-membership-rewards and competitor-2026-08-11-citi-thankyou-rewards)? Not established in the store; if yes, Option B's automated service would need a defined conversion rule analogous to Capital One's fixed-rate approach (research-source-2026-08-11-capital-one-one-way-cash-to-miles-conversion) rather than a simple balance move.",
+          "Should Option B be treated as a permanent target state, or a stepping stone toward Option A's unified-ledger model longer term? Not decided by this recommendation.",
+          "What are this platform's actual per-card balance data model constraints (e.g., can a balance be atomically moved between card records)? This recommendation assumes it can be automated in place; if that assumption is invalidated, Option A becomes the likely fallback.",
+          "Is redemption value (e.g., boosted rates, transfer partners) gated by card tier today on this platform the way Chase gates it (research-source-2026-08-11-chase-redemption-value-gated-by-tier), or is redemption value currently uniform across this platform's cards? This affects whether Option B needs equivalent tier-gating logic built alongside the automated transfer."
+        ]
+      },
+      "tags": [
+        "rewards-platform",
+        "credit-card-upgrade",
+        "strategy-recommendation"
+      ],
+      "sources": [],
+      "related_ids": [
+        "risk-2026-08-11-manual-transfer-does-not-scale",
+        "insight-2026-08-11-manual-ops-transfer",
+        "assumption-2026-08-11-current-handling-not-seamless",
+        "competitor-2026-08-11-chase-ultimate-rewards",
+        "competitor-2026-08-11-capital-one-rewards",
+        "competitor-2026-08-11-american-express-membership-rewards",
+        "competitor-2026-08-11-citi-thankyou-rewards",
+        "research-source-2026-08-11-chase-points-carry-over-product-change",
+        "research-source-2026-08-11-chase-redemption-value-gated-by-tier",
+        "research-source-2026-08-11-capital-one-one-way-cash-to-miles-conversion"
+      ],
+      "owner": "strategy-agent",
+      "created_at": "2026-08-11T22:00:00Z",
+      "updated_at": "2026-08-11T22:00:00Z"
+    },
+    {
+      "id": "risk-2026-08-11-automated-transfer-failure-modes",
+      "type": "risk",
+      "title": "Automating the transfer shifts risk from an ops-capacity bottleneck to system-level failure modes",
+      "summary": "Replacing the manual ops transfer with an automated, event-driven service (as recommended in decision-2026-08-11-automated-transfer-service-recommendation) removes the ops-capacity bottleneck described in risk-2026-08-11-manual-transfer-does-not-scale, but introduces a different, currently unaddressed class of risk: retries, idempotency, and partial-transfer states under concurrent or failed upgrade events.",
+      "status": "draft",
+      "confidence": "medium",
+      "details": "Surfaced while evaluating automation options for risk-2026-08-11-manual-transfer-does-not-scale: an event-driven automated transfer (Option B in decision-2026-08-11-automated-transfer-service-recommendation) still performs a per-upgrade transfer operation, just without a human in the loop. If the service fails partway through, retries without idempotency protection, or races with a concurrent upgrade/downgrade on the same account, a customer's balance could end up duplicated, lost, or left in an inconsistent state. This is a materially different failure mode than the ops-capacity bottleneck risk-2026-08-11-manual-transfer-does-not-scale describes, and nothing currently in the store addresses it — solution-design should define reconciliation, idempotency, and retry-safety requirements for the automated transfer service before it is built.",
+      "tags": [
+        "rewards-platform",
+        "credit-card-upgrade",
+        "automation",
+        "reliability"
+      ],
+      "sources": [],
+      "related_ids": [
+        "decision-2026-08-11-automated-transfer-service-recommendation",
+        "risk-2026-08-11-manual-transfer-does-not-scale",
+        "insight-2026-08-11-manual-ops-transfer"
+      ],
+      "owner": "strategy-agent",
+      "created_at": "2026-08-11T22:01:00Z",
+      "updated_at": "2026-08-11T22:01:00Z"
     }
   ]
 }
