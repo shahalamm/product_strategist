@@ -158,16 +158,18 @@ render anything (see "Explicitly deferred" below).
   at all — don't force scores to exist just because the capability now
   does.
 
-## Explicitly deferred: positioning "Us" on the same axes
+## Positioning "Us" on the same axes is a different agent's job
 
-This task does not solve how the project's own stance gets positioned on
-the axes above. `competitor` records are for external products only —
-there is no mechanism in this schema for scoring the project's own
-position, and none is invented here. Whoever builds the interactive
-perceptual-map rendering surface next needs to decide that separately
-(a new record type? a field on an existing type? computed at render time
-from `decision`/`requirement` records?) — don't infer or default one from
-this agent.
+This agent never positions the project's own stance on an axis —
+`competitor` records are for external products only, and this agent has
+no mechanism for scoring "us." That gap is resolved by
+`own-position-agent` (`.claude/agents/own-position-agent.md`), which
+reuses the exact axis labels this agent establishes here and reports
+where the project's own stance genuinely falls, or leaves an axis
+unscored when nothing in the store resolves it — the same discipline
+this agent applies to competitors it can't honestly place. Don't
+duplicate that reasoning here; `research-agent` stays scoped to external
+products.
 
 ## Example
 

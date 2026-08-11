@@ -32,7 +32,7 @@
           "enum": [
             "insight", "decision", "assumption", "persona", "competitor",
             "market-signal", "opportunity", "risk", "feature-idea",
-            "research-source", "requirement", "system-impact"
+            "research-source", "requirement", "system-impact", "own-position"
           ]
         },
         "title": { "type": "string", "minLength": 1 },
@@ -275,6 +275,25 @@
                     "items": { "type": "string" },
                     "description": "requirement record ids this impact traces from. A system-impact record with no traceable requirement is a guess, not an assessment."
                   }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "type": { "const": "own-position" } } },
+          "then": {
+            "required": ["data"],
+            "properties": {
+              "data": {
+                "type": "object",
+                "required": ["axis", "axis_low_label", "axis_high_label", "value", "rationale"],
+                "properties": {
+                  "axis": { "type": "string", "minLength": 1 },
+                  "axis_low_label": { "type": "string", "minLength": 1 },
+                  "axis_high_label": { "type": "string", "minLength": 1 },
+                  "value": { "type": "integer", "minimum": 1, "maximum": 5 },
+                  "rationale": { "type": "string", "minLength": 1 }
                 }
               }
             }

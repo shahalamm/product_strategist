@@ -95,10 +95,14 @@ records backing the profile); `requirement` needs `statement`,
 `decision` record it makes buildable); `system-impact` needs
 `system_area`, `impact_description`, `severity`, and
 `elaborates_requirement_ids` (the specific `requirement` record(s) it
-traces from — see `.claude/memory/README.md`,
-`.claude/examples/research-agent/`, `.claude/examples/solution-design/`,
-and `.claude/examples/systems-impact/` for full examples). A skill or
-agent that writes one of these six types must populate `data` in its
+traces from); `own-position` needs `axis`, `axis_low_label`,
+`axis_high_label`, `value`, and `rationale` — the same shape as a
+`competitor`'s optional `data.scores` entries, so the project's own
+stance and a competitor's are directly plottable together (see
+`.claude/memory/README.md`, `.claude/examples/research-agent/`,
+`.claude/examples/solution-design/`, `.claude/examples/systems-impact/`,
+and `.claude/examples/own-position-agent/` for full examples). A skill or
+agent that writes one of these seven types must populate `data` in its
 required shape, not just narrate the equivalent content in `details` or
 `summary` — those fields are for human-readable framing, not for holding
 data another skill needs to parse.

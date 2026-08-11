@@ -23,9 +23,8 @@ The platform is built one skill/agent at a time, narrow before wide, per
    found. Refuses to research a broad category if scope isn't established
    yet. May optionally score competitors on 1-3 project-specific axes for
    a future perceptual map, only when a score genuinely traces to
-   evidence already gathered — how the project's own stance gets
-   positioned on those axes remains an open question for whoever builds
-   the interactive rendering.
+   evidence already gathered. Never positions the project's own stance —
+   see `own-position-agent` below.
 4. **`strategy-agent`** (agent) — given an already-grounded open
    risk/assumption, generates 2-4 solution options with a structured
    impact assessment each, engages with any existing competitor research
@@ -56,13 +55,27 @@ The platform is built one skill/agent at a time, narrow before wide, per
    populated/partial/not-available across all 35, which is the actual
    test of whether the other six agents' records compose into something
    coherent.
+8. **`own-position-agent`** (agent) — finds every perceptual-map axis
+   `research-agent` has already scored competitors on, and reports where
+   the project's own stance falls on each — reusing the exact axis
+   labels, never inventing a new axis, and omitting an axis entirely
+   rather than guessing when nothing in the store resolves it. Marks a
+   position `status: "draft"` / `confidence: "low"` when the decision it
+   derives from is itself provisional, naming the specific unvalidated
+   assumption rather than hedging vaguely. `competitor` records stay
+   scoped to external products; this is the only agent that positions
+   "us."
 
 ## Still to come
 
-All seven pieces of the original vision are now built. The core
-discovery → research → strategy → solution-design → systems-impact →
-documentation loop is complete end to end for a single project.
+All eight pieces built so far are the original vision plus the
+perceptual-map extension (Tasks 11-12). The core discovery → research →
+strategy → solution-design → systems-impact → documentation loop is
+complete end to end for a single project, and competitors/own-position
+can now be plotted on the same axes — no rendering surface exists for
+that yet.
 
 The next horizon is a parked UI track — a way to interact with this
-platform outside a Claude Code conversation — noted here as a pointer to
-future work, not started or designed in this repository.
+platform outside a Claude Code conversation, including rendering the
+perceptual map — noted here as a pointer to future work, not started or
+designed in this repository.

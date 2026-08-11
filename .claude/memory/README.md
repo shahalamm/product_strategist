@@ -57,21 +57,25 @@ section). Skills and agents should not read or write `project_id` today.
 the record types that a real skill or agent already produces:
 `decision`, `assumption` (written by `discovery-interview`),
 `research-source`, `competitor` (written by `research-agent`),
-`requirement` (written by `solution-design`), and `system-impact`
-(written by `systems-impact`). That's not an oversight — each has an
-obvious, stable shape that's already load-bearing for how this platform
-reasons about discovery, research, design, or downstream impact (a
-decision needs its alternatives and rationale to be useful later; an
-assumption needs to be a falsifiable statement with a validation status;
-a research-source needs one checkable claim and a retrieval date, not a
-vague paraphrase of an article; a competitor profile needs to name the
-product, state its positioning in its own words, and cite the
-research-source records backing it, or it isn't a profile — it's an
-opinion; a requirement needs a testable statement, checkable acceptance
-criteria, and the id of the decision it makes buildable, or it's a wish,
-not a requirement; a system-impact needs a specific system area, a
-concrete impact description, a severity, and the requirement id(s) it
-traces from, or it's a guess, not an assessment).
+`requirement` (written by `solution-design`), `system-impact` (written by
+`systems-impact`), and `own-position` (written by `own-position-agent`).
+That's not an oversight — each has an obvious, stable shape that's
+already load-bearing for how this platform reasons about discovery,
+research, design, or downstream impact (a decision needs its
+alternatives and rationale to be useful later; an assumption needs to be
+a falsifiable statement with a validation status; a research-source
+needs one checkable claim and a retrieval date, not a vague paraphrase of
+an article; a competitor profile needs to name the product, state its
+positioning in its own words, and cite the research-source records
+backing it, or it isn't a profile — it's an opinion; a requirement needs
+a testable statement, checkable acceptance criteria, and the id of the
+decision it makes buildable, or it's a wish, not a requirement; a
+system-impact needs a specific system area, a concrete impact
+description, a severity, and the requirement id(s) it traces from, or
+it's a guess, not an assessment; an own-position needs the same axis
+shape a `competitor` score uses — axis, both labels, a 1-5 value, and a
+rationale — because it has to be plottable on the same perceptual map,
+not a free-form claim about where "we" stand).
 
 The other types (`insight`, `persona`, `market-signal`, `opportunity`,
 `risk`, `feature-idea`) stay generic — `data` is optional and
@@ -107,11 +111,20 @@ level for the same reason as `impact` above: a `competitor` record with no
 scores is still a complete, valid record. Every competitor scored on the
 same axis in one invocation must use identical `axis_low_label`/
 `axis_high_label` text, or the axis isn't really the same axis across
-them. How the project's own stance gets positioned on these axes is an
-open question, deliberately not solved by this addition — see
-`.claude/agents/research-agent.md`'s "Explicitly deferred" section. See
-`.claude/examples/research-agent/` for a fully-populated example,
-including a competitor deliberately left unscored on an axis.
+them. See `.claude/examples/research-agent/` for a fully-populated
+example, including a competitor deliberately left unscored on an axis.
+
+How the project's own stance gets positioned on these same axes is what
+`own-position` records are for (written by `own-position-agent`, not
+`research-agent` — `competitor` records stay for external products
+only). An `own-position` reuses the same axis shape as a `competitor`
+score by design, so the two are directly plottable together — see
+`own-position` in the type list above, and
+`.claude/examples/own-position-agent/` for a fully-populated example,
+including an axis genuinely omitted because nothing in the store resolves
+where "we" stand on it, and a scored axis explicitly marked provisional
+(`status: "draft"`, `confidence: "low"`) because the decision it derives
+from itself rests on an unvalidated assumption.
 
 ## Example records
 
