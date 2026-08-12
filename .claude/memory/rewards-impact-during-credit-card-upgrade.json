@@ -643,6 +643,192 @@
       "owner": "solution-design",
       "created_at": "2026-08-11T20:34:24Z",
       "updated_at": "2026-08-11T20:34:24Z"
+    },
+    {
+      "id": "system-impact-2026-08-11-events-trigger-not-yet-published",
+      "type": "system-impact",
+      "title": "The \"new card active\" trigger likely isn't a published, redeliverable event yet",
+      "summary": "requirement-2026-08-11-transfer-trigger-event's trigger point and requirement-2026-08-11-transfer-idempotency-and-retry-safety's redelivery handling both presuppose an event that, per the store's own description of today's fully manual process, doesn't appear to exist as a subscribable event yet.",
+      "status": "active",
+      "confidence": "medium",
+      "data": {
+        "system_area": "events",
+        "impact_description": "requirement-2026-08-11-transfer-trigger-event specifies the transfer service is triggered by the new card record's status becoming \"active,\" and requirement-2026-08-11-transfer-idempotency-and-retry-safety's acceptance criteria explicitly require handling the case where \"the upgrade-completion event is delivered more than once.\" Both assume a genuine, subscribable event with at-least-once delivery and redelivery semantics already exists at that point in the upgrade lifecycle. insight-2026-08-11-manual-ops-transfer establishes that today's transfer is a fully manual ops action, with nothing in the store indicating card-status-becoming-active is currently published as an event rather than just a status column update inside the upgrade flow. If it isn't already an emitted event, standing one up — with the delivery and redelivery guarantees requirement-3 depends on — is new event infrastructure the automated transfer service is being built on top of, not something it can simply subscribe to.",
+        "severity": "medium",
+        "elaborates_requirement_ids": [
+          "requirement-2026-08-11-transfer-trigger-event",
+          "requirement-2026-08-11-transfer-idempotency-and-retry-safety"
+        ]
+      },
+      "tags": [
+        "rewards-platform",
+        "credit-card-upgrade",
+        "automation",
+        "systems-impact"
+      ],
+      "sources": [],
+      "related_ids": [
+        "requirement-2026-08-11-transfer-trigger-event",
+        "requirement-2026-08-11-transfer-idempotency-and-retry-safety",
+        "insight-2026-08-11-manual-ops-transfer"
+      ],
+      "owner": "systems-impact",
+      "created_at": "2026-08-11T23:00:00Z",
+      "updated_at": "2026-08-11T23:00:00Z"
+    },
+    {
+      "id": "system-impact-2026-08-11-data-model-transfer-record-needed",
+      "type": "system-impact",
+      "title": "Idempotency and detectability require a persisted per-upgrade transfer record, not just balance columns",
+      "summary": "Satisfying requirement-2026-08-11-transfer-idempotency-and-retry-safety's exactly-once and detectable-not-silent acceptance criteria requires a new, queryable transfer-attempt entity keyed by upgrade — something the current per-card balance model, built for a human-mediated process, has no reason to already have.",
+      "status": "active",
+      "confidence": "medium",
+      "data": {
+        "system_area": "data-model",
+        "impact_description": "requirement-2026-08-11-transfer-idempotency-and-retry-safety requires that redelivering the same upgrade-completion event twice results in exactly one transfer, and that a partial failure leaves the inconsistency \"detectable, not silent.\" Neither is achievable from the balance columns alone (per requirement-2026-08-11-automated-balance-transfer-on-upgrade) — the service needs a separate, persisted record per upgrade attempt (e.g., keyed by the triggering event or upgrade id) tracking status such as pending/complete/failed, so a redelivered event can be recognized as already-handled and a partial failure has somewhere to be flagged. insight-2026-08-11-manual-ops-transfer describes today's process as a human performing the transfer directly, with no indication such a record already exists — a person doing the move by hand didn't need one.",
+        "severity": "high",
+        "elaborates_requirement_ids": [
+          "requirement-2026-08-11-automated-balance-transfer-on-upgrade",
+          "requirement-2026-08-11-transfer-idempotency-and-retry-safety"
+        ]
+      },
+      "tags": [
+        "rewards-platform",
+        "credit-card-upgrade",
+        "automation",
+        "systems-impact"
+      ],
+      "sources": [],
+      "related_ids": [
+        "requirement-2026-08-11-automated-balance-transfer-on-upgrade",
+        "requirement-2026-08-11-transfer-idempotency-and-retry-safety"
+      ],
+      "owner": "systems-impact",
+      "created_at": "2026-08-11T23:05:00Z",
+      "updated_at": "2026-08-11T23:05:00Z"
+    },
+    {
+      "id": "system-impact-2026-08-11-monitoring-detectable-not-monitored",
+      "type": "system-impact",
+      "title": "\"Detectable\" inconsistency still needs something actively looking for it",
+      "summary": "requirement-2026-08-11-transfer-idempotency-and-retry-safety only requires a partial-transfer inconsistency to be detectable in principle; its own edge_cases explicitly scope out alerting or monitoring for it, so nothing yet ensures anyone is notified when that state occurs.",
+      "status": "active",
+      "confidence": "high",
+      "data": {
+        "system_area": "monitoring",
+        "impact_description": "requirement-2026-08-11-transfer-idempotency-and-retry-safety's third acceptance criterion only requires that a partial failure leave the system in a state where the inconsistency is \"detectable, not silent\" — and its own edge_cases entry explicitly states this requirement \"does not cover operational monitoring or alerting for stuck/failed transfers, which remains unaddressed.\" Detectable in stored state and actually detected are different things: without an alert or scheduled check that surfaces a flagged inconsistency to a person, a customer's transfer can sit in that technically-detectable-but-unobserved state indefinitely, with the wrong balance showing on their new card the whole time.",
+        "severity": "high",
+        "elaborates_requirement_ids": [
+          "requirement-2026-08-11-transfer-idempotency-and-retry-safety"
+        ]
+      },
+      "details": "This is severe enough that it likely needs a follow-up requirement — e.g. an active alert or reconciliation check on any transfer left in a non-terminal or failed state past an expected window — but writing that requirement is out of scope here.",
+      "tags": [
+        "rewards-platform",
+        "credit-card-upgrade",
+        "automation",
+        "reliability",
+        "systems-impact"
+      ],
+      "sources": [],
+      "related_ids": [
+        "requirement-2026-08-11-transfer-idempotency-and-retry-safety",
+        "risk-2026-08-11-automated-transfer-failure-modes",
+        "risk-2026-08-11-detectable-inconsistency-goes-unmonitored"
+      ],
+      "owner": "systems-impact",
+      "created_at": "2026-08-11T23:10:00Z",
+      "updated_at": "2026-08-11T23:10:00Z"
+    },
+    {
+      "id": "system-impact-2026-08-11-operations-no-exception-handoff",
+      "type": "system-impact",
+      "title": "Automating the transfer removes ops from the default path but defines no exception handoff",
+      "summary": "Ops previously performed and therefore always knew the state of every transfer; once the automated service handles the default path, no requirement here defines who receives a flagged inconsistency or what they do with it.",
+      "status": "active",
+      "confidence": "medium",
+      "data": {
+        "system_area": "operations",
+        "impact_description": "insight-2026-08-11-manual-ops-transfer establishes that operations previously performed every reward-point transfer by hand, which meant they inherently knew the state of every in-flight transfer. requirement-2026-08-11-automated-balance-transfer-on-upgrade and requirement-2026-08-11-transfer-idempotency-and-retry-safety together remove ops from that path under the normal case, and the latter anticipates transfers can still fail partway — but neither requirement, nor anything else in the store, defines who receives a flagged inconsistency once one is detected, or what action they're expected to take. Ops's role changes from \"performs every transfer\" to \"resolves an unspecified subset of exceptions,\" with no defined handoff or runbook for the first stuck transfer after launch.",
+        "severity": "medium",
+        "elaborates_requirement_ids": [
+          "requirement-2026-08-11-automated-balance-transfer-on-upgrade",
+          "requirement-2026-08-11-transfer-idempotency-and-retry-safety"
+        ]
+      },
+      "tags": [
+        "rewards-platform",
+        "credit-card-upgrade",
+        "automation",
+        "systems-impact"
+      ],
+      "sources": [],
+      "related_ids": [
+        "requirement-2026-08-11-automated-balance-transfer-on-upgrade",
+        "requirement-2026-08-11-transfer-idempotency-and-retry-safety",
+        "insight-2026-08-11-manual-ops-transfer",
+        "risk-2026-08-11-detectable-inconsistency-goes-unmonitored"
+      ],
+      "owner": "systems-impact",
+      "created_at": "2026-08-11T23:15:00Z",
+      "updated_at": "2026-08-11T23:15:00Z"
+    },
+    {
+      "id": "system-impact-2026-08-11-customer-support-no-status-visibility",
+      "type": "system-impact",
+      "title": "Support loses its informal visibility into transfer status once ops is out of the loop",
+      "summary": "A customer's first sign of a problem is missing points on their new card, and support agents no longer have an ops person to ask what happened, since no requirement here gives them a way to look up an individual transfer's status.",
+      "status": "active",
+      "confidence": "medium",
+      "data": {
+        "system_area": "customer-support",
+        "impact_description": "requirement-2026-08-11-automated-balance-transfer-on-upgrade's acceptance criteria state the customer takes no action beyond the upgrade itself, so a customer's first signal that something went wrong is simply noticing their points are missing after upgrading. insight-2026-08-11-manual-ops-transfer describes today's transfer as a manual ops action, meaning a support agent fielding a \"where are my points\" question could previously ask the ops person who performed it directly. Once the transfer is automated per this decision, none of the three requirements define a way for a support agent to look up an individual customer's transfer status (pending/complete/failed) — automating the transfer removes that informal visibility path without replacing it with anything support-facing.",
+        "severity": "medium",
+        "elaborates_requirement_ids": [
+          "requirement-2026-08-11-automated-balance-transfer-on-upgrade",
+          "requirement-2026-08-11-transfer-idempotency-and-retry-safety"
+        ]
+      },
+      "tags": [
+        "rewards-platform",
+        "credit-card-upgrade",
+        "automation",
+        "systems-impact"
+      ],
+      "sources": [],
+      "related_ids": [
+        "requirement-2026-08-11-automated-balance-transfer-on-upgrade",
+        "requirement-2026-08-11-transfer-idempotency-and-retry-safety",
+        "insight-2026-08-11-manual-ops-transfer"
+      ],
+      "owner": "systems-impact",
+      "created_at": "2026-08-11T23:20:00Z",
+      "updated_at": "2026-08-11T23:20:00Z"
+    },
+    {
+      "id": "risk-2026-08-11-detectable-inconsistency-goes-unmonitored",
+      "type": "risk",
+      "title": "A detectable inconsistency is not the same as a monitored one",
+      "summary": "requirement-2026-08-11-transfer-idempotency-and-retry-safety makes a partial-transfer inconsistency detectable in the system's state, but nothing in the store defines an alert, an owner, or a resolution process for it, so a flagged inconsistency could persist unnoticed and unresolved indefinitely despite technically satisfying that requirement's \"detectable, not silent\" criterion.",
+      "status": "draft",
+      "confidence": "medium",
+      "details": "This is distinct from risk-2026-08-11-automated-transfer-failure-modes, which was about the existence of retry/idempotency/partial-transfer failure modes themselves and is what requirement-2026-08-11-transfer-idempotency-and-retry-safety was written to address. This new risk is one step further downstream: even with that requirement satisfied, satisfying \"detectable\" only means the information exists somewhere in stored state — it says nothing about whether anyone is watching for it, alerted to it, or has an owner for resolving it once flagged (system-impact-2026-08-11-monitoring-detectable-not-monitored, system-impact-2026-08-11-operations-no-exception-handoff).",
+      "tags": [
+        "rewards-platform",
+        "credit-card-upgrade",
+        "automation",
+        "reliability"
+      ],
+      "sources": [],
+      "related_ids": [
+        "system-impact-2026-08-11-monitoring-detectable-not-monitored",
+        "system-impact-2026-08-11-operations-no-exception-handoff",
+        "requirement-2026-08-11-transfer-idempotency-and-retry-safety",
+        "risk-2026-08-11-automated-transfer-failure-modes"
+      ],
+      "owner": "systems-impact",
+      "created_at": "2026-08-11T23:25:00Z",
+      "updated_at": "2026-08-11T23:25:00Z"
     }
   ]
 }
